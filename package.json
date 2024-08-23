@@ -1,0 +1,19 @@
+{
+  "name": "dspoken",
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.5.0",
+  "description": "A tools for daily spoken practice in English",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts":{
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+ },
+  "devDependencies": {
+    "turbo": "^2.0.14"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}
