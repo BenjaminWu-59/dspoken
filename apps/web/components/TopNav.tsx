@@ -24,15 +24,6 @@ const TopNav = () => {
         href="/"
         className={cn(
           "text-lg font-medium transition-colors hover:text-primary hidden sm:inline-block",
-          pathname === "/blog" ? "text-foreground" : "text-foreground/60"
-        )}
-      >
-        Practice
-      </Link>
-      <Link
-        href="/"
-        className={cn(
-          "text-lg font-medium transition-colors hover:text-primary hidden sm:inline-block",
           pathname === "/about" ? "text-foreground" : "text-foreground/60"
         )}
       >
