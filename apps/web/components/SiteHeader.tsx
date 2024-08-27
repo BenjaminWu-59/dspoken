@@ -30,7 +30,7 @@ const SiteHeader = () => {
 
   return (
     <header className="z-20 top-0 w-full px-2 py-5 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-3xl items-center">
+      <div className="container flex items-center h-14 max-w-screen-3xl">
         <TopNav />
         <div className="flex flex-1 items-center justify-end space-x-2">
           {user ? (

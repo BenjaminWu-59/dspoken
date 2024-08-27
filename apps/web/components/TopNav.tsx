@@ -8,7 +8,7 @@ import Image from "next/image";
 const TopNav = () => {
   const pathname = usePathname();
   return (
-    <nav className="flex items-center space-x-4 lg:space-x-6 justify-center">
+    <nav className="flex justify-center items-center space-x-4 lg:space-x-6">
       <Link href="/" className="mr-2 flex items-center justify-center space-x-1">
         <Image
           src="/logo.png"
