@@ -12,6 +12,9 @@ apps/server/dist
 apps/server/node_modules
 apps/server/build
 
+# env
+apps/server/.env
+
 # Logs
 apps/serverlogs
 apps/server/*.log
@@ -34,6 +37,9 @@ apps/web/node_modules
 apps/web/.pnp
 apps/web/.pnp.js
 apps/web/.yarn/install-state.gz
+
+# env
+apps/web/.env
 
 # testing
 apps/web/coverage
