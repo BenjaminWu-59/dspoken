@@ -4,3 +4,66 @@ node_modules
 
 # turbo
 .turbo
+
+#---------- server-specific ignores ----------#
+# apps/server
+# compiled output
+apps/server/dist
+apps/server/node_modules
+apps/server/build
+
+# Logs
+apps/serverlogs
+apps/server/*.log
+apps/server/npm-debug.log*
+apps/server/pnpm-debug.log*
+apps/server/yarn-debug.log*
+apps/server/yarn-error.log*
+apps/server/lerna-debug.log*
+
+
+# turbo
+apps/server/.turbo
+
+
+#---------- web-specific ignores ----------#
+# apps/web/
+
+# dependencies
+apps/web/node_modules
+apps/web/.pnp
+apps/web/.pnp.js
+apps/web/.yarn/install-state.gz
+
+# testing
+apps/web/coverage
+
+# next.js
+apps/web/.next/
+apps/web/out/
+
+# production
+apps/web/build
+
+# misc
+apps/web/.DS_Store
+apps/web/*.pem
+
+# debug
+apps/web/npm-debug.log*
+apps/web/yarn-debug.log*
+apps/web/yarn-error.log*
+apps/web/pnpm-debug.log*
+
+# local env files
+apps/web/.env*.local
+
+# vercel
+apps/web/.vercel
+
+# typescript
+apps/web/*.tsbuildinfo
+apps/web/next-env.d.ts
+
+# turbo
+apps/web/.turbo
