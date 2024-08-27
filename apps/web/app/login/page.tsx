@@ -41,7 +41,7 @@ const Login = () => {
     console.log("提交的数据：", data)
     try {
       await signin(data.username, data.password);
-      router.push('/'); // 登录成功后重定向到首页
+      router.push('/admin'); // 登录成功后重定向到首页
     } catch (error) {
       console.log("登陆失败：", error)
     }

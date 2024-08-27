@@ -21,7 +21,7 @@ export const getUser = async (): Promise<User | null> => {
       return null;
     }
 
-    const res = await fetch(`http://localhost:5002/api/users/me`, {
+    const res = await fetch(`http://localhost:5002/api/user/me`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
