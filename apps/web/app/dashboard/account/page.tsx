@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <section className="flex">
 
-      <Card className="w-[35%] py-5 flex-col justify-center items-center">
+      <Card className="w-[35%] h-72 py-5 flex-col justify-center items-center">
         <div className="flex justify-center items-center">
           <Image
             src="/avatar.png"

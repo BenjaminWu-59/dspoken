@@ -18,7 +18,7 @@ const FormSchema = z.object({
     message: "Username must be at least 2 characters.",
   }),
   password: z.string().min(2, {
-    message: "password must be at least 8 characters.",
+    message: "password must be at least 13 characters.",
   }),
 })
 
@@ -39,7 +39,7 @@ const AccountInfo = () => {
   return (
     <div className="p-20">
       <Form  {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="pt-20 w-3/4 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="pt-20 space-y-6">
           <FormField
             control={form.control}
             name="username"
@@ -58,6 +58,7 @@ const AccountInfo = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>PassWord</FormLabel>
                 <FormControl>
                   <Input placeholder="Password" {...field} />
                 </FormControl>

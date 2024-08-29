@@ -27,7 +27,7 @@ const defaultDashRoute: DashRoute[] = [
 
 const SideNav = () => {
   return (
-    <nav className="flex flex-col w-[240px] h-full border-r border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
+    <nav className="flex flex-col w-96 h-full border-r border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
       <div className="p-10">
         <Link href="/" className="mr-2 flex items-center justify-center space-x-1">
           <Image
