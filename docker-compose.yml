@@ -1,0 +1,6 @@
+version: '3.8'
+services:
+  uploads:
+    build: .
+    volumes:
+      - ~/Program/program/dspoken_uploads:/uploads:rw
