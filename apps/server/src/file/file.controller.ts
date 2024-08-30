@@ -18,12 +18,11 @@ import * as path from 'path';
 import { Response } from 'express';
 import { JwtGuard } from "src/auth/guard";
 
-@UseGuards(JwtGuard) // 路由守卫提升，里面直接使用我们之前定义的JwtGuard类
 @Controller('file')
 export class FileController {
   constructor(private config: ConfigService) { }
 
-
+  @UseGuards(JwtGuard) // 路由守卫提升，里面直接使用我们之前定义的JwtGuard类
   @Post('upload')
   @FileFilter('file', {
     limits: {
