@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { AuthDto } from "./dto";
+import { SignupDto, SigninDto } from "./dto";
 import * as argon from 'argon2'
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { JwtService } from "@nestjs/jwt";
@@ -12,16 +12,17 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService, // 新增代码
     private config: ConfigService // 新增代码
-  ) {}
+  ) { }
 
   /*--------- 用户注册 ----------*/
-  async signup(dto: AuthDto) {
+  async signup(dto: SignupDto) {
     // 生成密码hash值
     const hash = await argon.hash(dto.password)
     try { // 这里使用了try catch 进行错误捕捉
       const user = await this.prisma.user.create({
         data: {
           email: dto.email,
+          name: dto.name,
           hash
         }
       })
@@ -36,7 +37,11 @@ export class AuthService {
       // prisma 错误单独处理，这里处理的是email重复的问题
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ForbiddenException('该邮箱已被注册(Credentials taken)')
+          if (error.meta.target[0] === "email") {
+            throw new ForbiddenException('该邮箱已被注册!')
+          } else {
+            throw new ForbiddenException('该名称已被注册!')
+          }
         }
       }
       // 其他错误直接抛出
@@ -44,13 +49,16 @@ export class AuthService {
     }
   }
 
-  async signin(dto: AuthDto) {
-    // 通过邮箱找出用户
-    const user = await this.prisma.user.findUnique({
+  async signin(dto: SigninDto) {
+    // 通过邮箱或姓名找出用户
+    const user = await this.prisma.user.findFirst({
       where: {
-        email: dto.email
-      }
-    })
+        OR: [
+          { email: dto.emailOrName },
+          { name: dto.emailOrName },
+        ],
+      },
+    });
 
     // 用户不存在，抛出异常
     if (!user) {

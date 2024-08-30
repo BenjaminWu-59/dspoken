@@ -18,10 +18,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name String @unique
+  email String @unique
   hash String
 
-  email  String? @unique
+  name  String? @unique
   phone  String?
   gender String? // male; female
   age    Int?
