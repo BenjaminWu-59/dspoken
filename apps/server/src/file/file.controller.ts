@@ -34,7 +34,7 @@ export class FileController {
     return {
       statusCode: 200,
       message: 'File uploaded successfully',
-      filename: file.filename,
+      filename: this.config.get("DEFAULT_URL") + "file/" + file.filename,
     };
   }
 

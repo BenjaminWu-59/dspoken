@@ -23,7 +23,7 @@ model User {
 
   email  String? @unique
   phone  String?
-  gender String?
+  gender String? // male; female
   age    Int?
   avatar String?
 
