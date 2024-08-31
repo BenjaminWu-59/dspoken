@@ -1,12 +1,25 @@
+'use client'
 import AccountInfo from "@/components/dashboard/AccountInfo";
 import {
   Card,
   CardContent,
 } from "@/components/ui/card"
 import Image from "next/image";
+import { getUser, User } from '@/api/user';
+import { useEffect, useState } from "react";
 
 
 export default function Page() {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await getUser();
+      console.log(userData)
+      setUser(userData);
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <section className="flex">
@@ -30,7 +43,7 @@ export default function Page() {
 
       <div className="flex-grow ml-4 space-y-6">
         <Card>
-          <AccountInfo />
+          <AccountInfo user={user} />
         </Card>
 
         <Card>

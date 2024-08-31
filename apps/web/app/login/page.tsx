@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { signin } from '@/api/auth';
 import { useRouter } from 'next/navigation';
+import { useToast } from "@/components/ui/use-toast"
 
 
 const FormSchema = z.object({
@@ -27,6 +28,7 @@ const FormSchema = z.object({
 })
 
 const Login = () => {
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,8 +45,14 @@ const Login = () => {
       await signin(data.username, data.password);
 
       window.location.href = '/dashboard';
-    } catch (error) {
-      console.log("登陆失败：", error)
+    } catch (error: any) {
+      console.error("登录失败：", error.message); 
+      
+      return toast({
+        variant: "destructive",
+        title: error.message,
+        duration: 1500
+      })
     }
   }
 
@@ -85,7 +93,7 @@ const Login = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Email" {...field} />
+                    <Input placeholder="Email or UserName" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
