@@ -68,8 +68,6 @@ export default function Page() {
             alt="avatar"
             className="w-full h-full rounded-full object-cover"
           />
-
-  
           <div className="absolute inset-0 flex justify-center items-center opacity-0 
                           group-hover:opacity-100 transition-opacity">
             <UploadImage
