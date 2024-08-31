@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { User, editUser } from "@/api/user"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { useToast } from "@/components/ui/use-toast"
 
 const defaultUserData = {
   name: "",
@@ -40,6 +41,9 @@ interface AccountInfoProps {
 }
 
 const AccountInfo = ({ user }: AccountInfoProps) => {
+  const { toast } = useToast()
+  const [isEdit, setIsEdit] = useState(false)
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: defaultUserData
@@ -59,11 +63,20 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const updatedUser = await editUser(data); // 将表单数据传递给 editUser
-      console.log(updatedUser)
+      const res = await editUser(data); // 将表单数据传递给 editUser
+      console.log("返回结果：", res)
+      window.location.reload()
 
-    } catch (error) {
-
+      return toast({
+        title: "修改成功！",
+        duration: 1500
+      })
+    } catch (error: any) {
+      return toast({
+        variant: "destructive",
+        title: error.message,
+        duration: 1500
+      })
     }
   };
 
@@ -141,7 +154,20 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">保存</Button>
+          {
+            isEdit ? (<div className="flex space-x-7">
+              <Button type="submit" className="w-full">保存</Button>
+              <Button className="w-full bg-gray-500"
+                onClick={() => setIsEdit(false)}
+              >取消</Button>
+            </div>) : (
+              <Button className="w-full bg-blue-500"
+                onClick={() => setIsEdit(true)}
+              >
+                编辑信息
+              </Button>
+            )
+          }
         </form>
       </Form>
     </div>

@@ -40,14 +40,11 @@ const Login = () => {
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log("提交的数据：", data)
     try {
       await signin(data.username, data.password);
 
       window.location.href = '/dashboard';
     } catch (error: any) {
-      console.error("登录失败：", error.message); 
-      
       return toast({
         variant: "destructive",
         title: error.message,

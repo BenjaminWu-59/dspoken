@@ -10,6 +10,12 @@ export interface User {
   password?: string
 }
 
+interface ResData{
+  statusCode: number;
+  message: string;
+  error:string;
+}
+
 export const getUser = async (): Promise<User | null> => {
   try {
     const accessToken = Cookies.get('access_token');
@@ -38,7 +44,8 @@ export const getUser = async (): Promise<User | null> => {
   }
 };
 
-export const editUser = async (userData: Partial<User>): Promise<User | null> => {
+
+export const editUser = async (userData: Partial<User>): Promise<any> => {
   try {
     const accessToken = Cookies.get('access_token');
 
@@ -56,14 +63,15 @@ export const editUser = async (userData: Partial<User>): Promise<User | null> =>
       body: JSON.stringify(userData),  // 将要更新的用户数据作为 JSON 字符串发送
     });
 
-    if (!res.ok) {
-      throw new Error('Failed to update user data');
-    }
+    const data:ResData = await res.json();
 
-    const data: User = await res.json();
-    return data;
+    console.log("resData:", data)
+
+    if (!res.ok) {
+      throw new Error(data.message)
+    }
+    return data
   } catch (error) {
-    console.error('editUser error:', error);
-    return null;
+    throw error;
   }
 };

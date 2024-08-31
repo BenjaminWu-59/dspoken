@@ -14,7 +14,6 @@ export default function Page() {
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getUser();
-      console.log(userData)
       setUser(userData);
     };
 
@@ -36,10 +35,9 @@ export default function Page() {
           />
         </div>
         <p className="py-2 text-center text-xl font-bold">
-          benjamin59@gmail.com
+          {user?.name || ""}
         </p>
       </Card>
-
 
       <div className="flex-grow ml-4 space-y-6">
         <Card>
