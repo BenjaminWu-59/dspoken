@@ -71,3 +71,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-button {
+  background-color: #3B82F6; /* Tailwind CSS 的 bg-blue-500 */
+  color: #FFFFFF; /* Tailwind CSS 的 text-white */
+  border-radius: 0.5rem; /* Tailwind CSS 的 rounded-lg */
+  transition: background-color 300ms ease-in-out; /* Tailwind CSS 的 transition duration-300 ease-in-out */
+}
+
+.custom-button:hover {
+  background-color: #2563EB; /* Tailwind CSS 的 hover:bg-blue-600 */
+}
+
+.custom-button:focus {
+  outline: none; /* Tailwind CSS 的 focus:outline-none */
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.7); /* Tailwind CSS 的 focus:ring-0 focus:ring-blue-700 */
+}

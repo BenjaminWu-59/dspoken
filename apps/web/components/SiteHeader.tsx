@@ -57,7 +57,7 @@ const SiteHeader = () => {
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <div className="w-full flex flex-col">
                   <hr className="border-t-1 border-gray-300 py-3" />
-                  <Button className="bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out hover:bg-blue-600 focus:outline-none focus:ring-0 focus:ring-blue-700"
+                  <Button className="custom-button"
                     onClick={() => signout()}
                   >
                     Sign Out

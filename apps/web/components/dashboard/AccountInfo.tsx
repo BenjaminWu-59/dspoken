@@ -11,6 +11,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { User, editUser } from "@/api/user"
 import { useEffect, useState } from "react"
@@ -61,6 +68,19 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
     }
   }, [user, form]);
 
+  const handleCancel = () => {
+    if (user) {
+      form.reset({
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        gender: user.gender || "",
+        age: user.age || null,
+      });
+    }
+    setIsEdit(false); // 关闭编辑模式
+  };
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       const res = await editUser(data); // 将表单数据传递给 editUser
@@ -76,17 +96,17 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
   };
 
   return (
-    <div className="px-5 py-10 flex justify-center">
+    <div className="px-10 pt-4 pb-12  flex justify-left">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 w-3/5">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="flex items-center">
-                <FormLabel className="w-[25%] text-nowrap text-base">用户名称</FormLabel>
+              <FormItem>
+                <FormLabel className="w-[25%] text-nowrap text-base">Name</FormLabel>
                 <FormControl>
-                  <Input disabled={!isEdit} placeholder="用户名称" {...field} />
+                  <Input disabled={!isEdit} placeholder="name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -96,7 +116,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="flex items-center ">
+              <FormItem>
                 <FormLabel className="w-[25%] text-nowrap text-base">Email</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} type="email" placeholder="Email" {...field} />
@@ -109,10 +129,10 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="phone"
             render={({ field }) => (
-              <FormItem className="flex items-center ">
-                <FormLabel className="w-[25%] text-nowrap text-base">电话</FormLabel>
+              <FormItem className="">
+                <FormLabel className="w-[25%] text-nowrap text-base">Phone</FormLabel>
                 <FormControl>
-                  <Input disabled={!isEdit} placeholder="电话" {...field} />
+                  <Input disabled={!isEdit} placeholder="phone" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -122,10 +142,18 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem className="flex items-center ">
-                <FormLabel className="w-[25%] text-nowrap text-base">性别</FormLabel>
+              <FormItem>
+                <FormLabel className="w-[25%] text-nowrap text-base">Gender</FormLabel>
                 <FormControl>
-                  <Input disabled={!isEdit} placeholder="性别" {...field} />
+                  <Select disabled={!isEdit} {...field}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Theme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">male</SelectItem>
+                      <SelectItem value="female">female</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,12 +163,12 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="age"
             render={({ field }) => (
-              <FormItem className="flex items-center ">
-                <FormLabel className="w-[25%] text-nowrap text-base">年龄</FormLabel>
+              <FormItem>
+                <FormLabel className="w-[25%] text-nowrap text-base">Age</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="年龄"
+                    placeholder="age"
                     disabled={!isEdit}
                     value={field.value ?? ""} // Convert null to empty string
                     onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
@@ -152,15 +180,17 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
           />
           {
             isEdit ? (<div className="flex space-x-7">
-              <Button type="submit" className="w-full">保存</Button>
-              <Button className="w-full bg-gray-500"
-                onClick={() => setIsEdit(false)}
-              >取消</Button>
+              <Button type="submit" className="px-10 custom-button">Confirm</Button>
+              <Button className="px-10"
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
             </div>) : (
-              <Button className="w-full bg-blue-500"
+              <Button className="px-10 custom-button"
                 onClick={() => setIsEdit(true)}
               >
-                编辑信息
+                Edit
               </Button>
             )
           }

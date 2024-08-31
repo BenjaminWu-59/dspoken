@@ -23,7 +23,7 @@ const TopNav = () => {
       <Link
         href="/"
         className={cn(
-          "text-lg font-medium transition-colors hover:text-primary hidden sm:inline-block",
+          "custom-button",
           pathname === "/about" ? "text-foreground" : "text-foreground/60"
         )}
       >
