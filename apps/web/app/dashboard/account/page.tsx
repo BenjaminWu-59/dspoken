@@ -17,7 +17,6 @@ import {
 import { getUser, User, editUser } from '@/api/user';
 import { useEffect, useState } from "react";
 import UploadImage from "@/components/UploadImage"
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 
@@ -37,12 +36,6 @@ export default function Page() {
     fetchUser();
   }, []);
 
-
-  const handleImageUpload = (url: string) => {
-    setAvatarUrl(url);
-    setIsDialogOpen(true);
-  };
-
   const onSubmit = async (url: string) => {
     try {
       const res = await editUser({
@@ -59,24 +52,29 @@ export default function Page() {
     }
   };
 
+  const handleImageUpload = (url: string) => {
+    console.log(111111)
+    setAvatarUrl(url);
+    setIsDialogOpen(true);  // 上传成功后立即打开弹窗
+  };
+
   return (
     <section className="flex">
 
       <Card className="w-[35%] h-[300px] flex flex-col justify-center items-center">
         <div className="w-36 h-36 relative flex justify-center items-center rounded-full group overflow-hidden">
-          {/* 用户头像图片 */}
           <img
             src={user?.avatar || "/avatar.png"}
             alt="avatar"
             className="w-full h-full rounded-full object-cover"
           />
 
-          {/* Hover 时显示 UploadImage 组件 */}
+  
           <div className="absolute inset-0 flex justify-center items-center opacity-0 
                           group-hover:opacity-100 transition-opacity">
             <UploadImage
               className="w-full h-full flex justify-center items-center"
-              onUpload={(e: string) => handleImageUpload(e)}
+              onUpload={async (e) => handleImageUpload(e)}
             />
           </div>
         </div>
@@ -103,7 +101,7 @@ export default function Page() {
                 variant="secondary"
                 onClick={() => onSubmit(avatarUrl)}
               >
-                确认修改
+                确认
               </Button>
             </DialogClose>
           </DialogFooter>

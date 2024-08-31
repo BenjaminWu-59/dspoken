@@ -8,7 +8,6 @@ interface UploadImageProps {
   className?: string;
 }
 export default function UploadImage({ onUpload, className = "" }: UploadImageProps) {
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -17,9 +16,9 @@ export default function UploadImage({ onUpload, className = "" }: UploadImagePro
 
       try {
         const res = await uploadImage(file);
-        // console.log("返回结果：", res)
-
-        setFileUrl(res.filename)
+        console.log("返回结果：", res)
+        
+        onUpload(res.filename ? res.filename : "");
       } catch (error: any) {
         return toast({
           variant: "destructive",
@@ -27,12 +26,6 @@ export default function UploadImage({ onUpload, className = "" }: UploadImagePro
           duration: 1500
         })
       }
-    }
-  };
-
-  const handleUploadClick = () => {
-    if (fileUrl) {
-      onUpload(fileUrl);
     }
   };
 
@@ -63,7 +56,6 @@ export default function UploadImage({ onUpload, className = "" }: UploadImagePro
                  group-hover:top-[0] p-5 w-full h-full
                  group-hover:opacity-100 bg-black/60
                  group-hover:backdrop-blur-sm duration-500"
-        onClick={handleUploadClick}
       >
         <Image
           src="/upload-light.svg"
