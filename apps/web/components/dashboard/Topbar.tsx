@@ -8,11 +8,23 @@ import {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { signout } from "@/api/auth";
+import { getUser, User } from '@/api/user';
+import { useEffect, useState } from "react";
 
 const Topbar = () => {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await getUser();
+      setUser(userData);
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <div className="px-6 py-5 flex justify-end items-center">
-      <p className="p-5 font-semibold">benjamin59@gmail.com</p>
+      <p className="p-5 font-semibold">{user?.name}</p>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex justify-center items-center">

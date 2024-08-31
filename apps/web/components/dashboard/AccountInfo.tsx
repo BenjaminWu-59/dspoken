@@ -91,7 +91,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
               <FormItem className="flex items-center">
                 <FormLabel className="w-[22%] text-nowrap text-base">用户名称</FormLabel>
                 <FormControl>
-                  <Input placeholder="用户名称" {...field} />
+                  <Input disabled={!isEdit} placeholder="用户名称" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,7 +104,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
               <FormItem className="flex items-center ">
                 <FormLabel className="w-[22%] text-nowrap text-base">Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="Email" {...field} />
+                  <Input disabled={!isEdit} type="email" placeholder="Email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -117,7 +117,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
               <FormItem className="flex items-center ">
                 <FormLabel className="w-[22%] text-nowrap text-base">电话</FormLabel>
                 <FormControl>
-                  <Input placeholder="电话" {...field} />
+                  <Input disabled={!isEdit} placeholder="电话" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -130,7 +130,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
               <FormItem className="flex items-center ">
                 <FormLabel className="w-[22%] text-nowrap text-base">性别</FormLabel>
                 <FormControl>
-                  <Input placeholder="性别" {...field} />
+                  <Input disabled={!isEdit} placeholder="性别" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -146,6 +146,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
                   <Input
                     type="number"
                     placeholder="年龄"
+                    disabled={!isEdit}
                     value={field.value ?? ""} // Convert null to empty string
                     onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
                   />
