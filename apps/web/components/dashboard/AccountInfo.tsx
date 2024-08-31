@@ -84,7 +84,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="name"
             render={({ field }) => (
               <FormItem className="flex items-center">
-                <FormLabel className="w-[22%] text-nowrap text-base">用户名称</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">用户名称</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} placeholder="用户名称" {...field} />
                 </FormControl>
@@ -97,7 +97,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="email"
             render={({ field }) => (
               <FormItem className="flex items-center ">
-                <FormLabel className="w-[22%] text-nowrap text-base">Email</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">Email</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} type="email" placeholder="Email" {...field} />
                 </FormControl>
@@ -110,7 +110,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="phone"
             render={({ field }) => (
               <FormItem className="flex items-center ">
-                <FormLabel className="w-[22%] text-nowrap text-base">电话</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">电话</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} placeholder="电话" {...field} />
                 </FormControl>
@@ -123,7 +123,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="gender"
             render={({ field }) => (
               <FormItem className="flex items-center ">
-                <FormLabel className="w-[22%] text-nowrap text-base">性别</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">性别</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} placeholder="性别" {...field} />
                 </FormControl>
@@ -136,7 +136,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="age"
             render={({ field }) => (
               <FormItem className="flex items-center ">
-                <FormLabel className="w-[22%] text-nowrap text-base">年龄</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">年龄</FormLabel>
                 <FormControl>
                   <Input
                     type="number"

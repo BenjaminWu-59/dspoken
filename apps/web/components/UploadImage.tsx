@@ -45,7 +45,7 @@ export default function UploadImage({ onUpload, className = "" }: UploadImagePro
   return (
     <div
       className={`${className} w-full h-full relative overflow-hidden
-                  group hover:transform transition-transform duration-400`
+                  group hover:transform transition-transform duration-300`
       }
       onClick={handleImageClick}
       style={{ cursor: 'pointer' }}

@@ -4,16 +4,30 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { getUser, User } from '@/api/user';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { getUser, User, editUser } from '@/api/user';
 import { useEffect, useState } from "react";
 import UploadImage from "@/components/UploadImage"
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-
+import { toast } from "@/components/ui/use-toast";
 
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState("")
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getUser();
@@ -23,18 +37,38 @@ export default function Page() {
     fetchUser();
   }, []);
 
+
+  const handleImageUpload = (url: string) => {
+    setAvatarUrl(url);
+    setIsDialogOpen(true);
+  };
+
+  const onSubmit = async (url: string) => {
+    try {
+      const res = await editUser({
+        avatar: url
+      });
+      console.log("返回结果：", res)
+      window.location.reload()
+    } catch (error: any) {
+      return toast({
+        variant: "destructive",
+        title: error.message,
+        duration: 1500
+      })
+    }
+  };
+
   return (
     <section className="flex">
 
       <Card className="w-[35%] h-[300px] flex flex-col justify-center items-center">
         <div className="w-36 h-36 relative flex justify-center items-center rounded-full group overflow-hidden">
           {/* 用户头像图片 */}
-          <Image
-            src="/avatar.png"
+          <img
+            src={user?.avatar || "/avatar.png"}
             alt="avatar"
-            fill
-            className="object-cover rounded-full"
-            priority
+            className="w-full h-full rounded-full object-cover"
           />
 
           {/* Hover 时显示 UploadImage 组件 */}
@@ -42,7 +76,7 @@ export default function Page() {
                           group-hover:opacity-100 transition-opacity">
             <UploadImage
               className="w-full h-full flex justify-center items-center"
-              onUpload={(e) => console.log(e)}
+              onUpload={(e: string) => handleImageUpload(e)}
             />
           </div>
         </div>
@@ -50,6 +84,31 @@ export default function Page() {
           {user?.name || ''}
         </p>
       </Card>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline" className="hidden">Open Dialog</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>头像预览</DialogTitle>
+            <DialogDescription>
+              {avatarUrl && <img src={avatarUrl} alt="Uploaded Image" />}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => onSubmit(avatarUrl)}
+              >
+                确认修改
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
 
       <div className="flex-grow ml-4 space-y-6">
