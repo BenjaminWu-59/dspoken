@@ -61,15 +61,9 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
     try {
       const updatedUser = await editUser(data); // 将表单数据传递给 editUser
       console.log(updatedUser)
-  
-      if (updatedUser) {
-        console.log("User updated successfully:", updatedUser);
-        // 你可以在这里处理更新成功后的逻辑，比如显示一条成功消息或刷新页面
-      } else {
-        console.log("Failed to update user.");
-      }
+
     } catch (error) {
-      console.error("Error updating user:", error);
+
     }
   };
 
@@ -81,8 +75,8 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-5">
-                <FormLabel className="text-nowrap text-base">用户名称</FormLabel>
+              <FormItem className="flex items-center">
+                <FormLabel className="w-[22%] text-nowrap text-base">用户名称</FormLabel>
                 <FormControl>
                   <Input placeholder="用户名称" {...field} />
                 </FormControl>
@@ -94,8 +88,8 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-5">
-                <FormLabel className="text-nowrap text-base">Email</FormLabel>
+              <FormItem className="flex items-center ">
+                <FormLabel className="w-[22%] text-nowrap text-base">Email</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="Email" {...field} />
                 </FormControl>
@@ -107,8 +101,8 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="phone"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-5">
-                <FormLabel className="text-nowrap text-base">电话</FormLabel>
+              <FormItem className="flex items-center ">
+                <FormLabel className="w-[22%] text-nowrap text-base">电话</FormLabel>
                 <FormControl>
                   <Input placeholder="电话" {...field} />
                 </FormControl>
@@ -120,8 +114,8 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-5">
-                <FormLabel className="text-nowrap text-base">性别</FormLabel>
+              <FormItem className="flex items-center ">
+                <FormLabel className="w-[22%] text-nowrap text-base">性别</FormLabel>
                 <FormControl>
                   <Input placeholder="性别" {...field} />
                 </FormControl>
@@ -133,8 +127,8 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             control={form.control}
             name="age"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-5">
-                <FormLabel className="text-nowrap text-base">年龄</FormLabel>
+              <FormItem className="flex items-center ">
+                <FormLabel className="w-[22%] text-nowrap text-base">年龄</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
