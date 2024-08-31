@@ -66,11 +66,6 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
       const res = await editUser(data); // 将表单数据传递给 editUser
       console.log("返回结果：", res)
       window.location.reload()
-
-      return toast({
-        title: "修改成功！",
-        duration: 1500
-      })
     } catch (error: any) {
       return toast({
         variant: "destructive",

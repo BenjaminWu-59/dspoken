@@ -4,9 +4,12 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import Image from "next/image";
 import { getUser, User } from '@/api/user';
 import { useEffect, useState } from "react";
+import UploadImage from "@/components/UploadImage"
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
 
 
 export default function Page() {
@@ -23,21 +26,31 @@ export default function Page() {
   return (
     <section className="flex">
 
-      <Card className="w-[35%] h-72 py-5 flex-col justify-center items-center">
-        <div className="flex justify-center items-center">
+      <Card className="w-[35%] h-[300px] flex flex-col justify-center items-center">
+        <div className="w-36 h-36 relative flex justify-center items-center rounded-full group overflow-hidden">
+          {/* 用户头像图片 */}
           <Image
             src="/avatar.png"
             alt="avatar"
-            className="rounded-full"
-            width={80}
-            height={80}
+            fill
+            className="object-cover rounded-full"
             priority
           />
+
+          {/* Hover 时显示 UploadImage 组件 */}
+          <div className="absolute inset-0 flex justify-center items-center opacity-0 
+                          group-hover:opacity-100 transition-opacity">
+            <UploadImage
+              className="w-full h-full flex justify-center items-center"
+              onUpload={(e) => console.log(e)}
+            />
+          </div>
         </div>
         <p className="py-2 text-center text-xl font-bold">
-          {user?.name || ""}
+          {user?.name || ''}
         </p>
       </Card>
+
 
       <div className="flex-grow ml-4 space-y-6">
         <Card>

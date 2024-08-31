@@ -4,7 +4,7 @@ import * as path from 'path';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class UploadService {
+export class FileService {
   private uploadPath: string;
 
   constructor(private configService: ConfigService) {
