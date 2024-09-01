@@ -1,8 +1,16 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-  DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import { Button } from "../ui/button";
 import { signout } from "@/api/auth";
@@ -11,7 +19,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 
 const Topbar = () => {
-  const pathname:string = usePathname().split('/').pop() || ""
+  const pathname: string = usePathname().split('/').pop() || ""
 
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
@@ -29,7 +37,7 @@ const Topbar = () => {
         {pathname?.charAt(0).toUpperCase() + pathname?.slice(1)}
       </p>
       <div className="flex">
-        <p className="p-5 font-semibold">{user?.email}</p>
+        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="w-16 h-16 flex justify-center items-center">
@@ -40,27 +48,31 @@ const Topbar = () => {
               />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="flex flex-col justify-center items-center">
-            <div className="w-full p-5 flex flex-col">
-              <DropdownMenuItem >
-                Account
+          <DropdownMenuContent className="w-48 mr-3">
+            <DropdownMenuLabel>
+               <p className="text-base">{user?.name}</p>
+               <p className="text-gray-500">{user?.email}</p>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                Profile
               </DropdownMenuItem>
-              <DropdownMenuItem >
-                Settings
+              <DropdownMenuItem>
+                VIP
               </DropdownMenuItem>
-
-              <Button className="my-2 bg-blue-500 text-white rounded-lg transition duration-300 ease-in-out hover:bg-blue-600 focus:outline-none focus:ring-0 focus:ring-blue-700"
-                onClick={() => signout()}
-              >
-                Sign Out
-              </Button>
-            </div>
-
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => signout()}>
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </div>
   )
 }
+
+// onClick={() => signout()
 
 export default Topbar

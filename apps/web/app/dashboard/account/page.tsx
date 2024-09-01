@@ -112,11 +112,6 @@ export default function Page() {
           <AccountInfo user={user} />
         </Card>
 
-        <Card>
-          <CardContent>
-            充值信息
-          </CardContent>
-        </Card>
       </div>
     </section>
   )
