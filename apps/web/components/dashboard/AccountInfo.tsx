@@ -147,7 +147,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
                 <FormControl>
                   <Select disabled={!isEdit} {...field}>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Theme" />
+                      <SelectValue placeholder="male or female" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="male">male</SelectItem>

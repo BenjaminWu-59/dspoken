@@ -10,6 +10,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import {
@@ -23,9 +24,9 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { signin } from '@/api/auth';
+import { signin, signup } from '@/api/auth';
 import { useToast } from "@/components/ui/use-toast"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const FormSchema = z.object({
@@ -36,6 +37,27 @@ const FormSchema = z.object({
     message: "password must be at least 8 characters.",
   }),
 })
+
+const signUpFormSchema = z.object({
+  name: z.string()
+    .min(4, { message: "用户名至少4个字符！" })
+    .regex(/^\S*$/, { message: "用户名不得包含空格！" }),
+
+  password: z.string()
+    .min(8, { message: "密码至少八个字母！" })
+    .regex(/^\S*$/, { message: "密码不得包含空格！" }),
+
+  passwordVerify: z.string()
+    .min(8, { message: "密码至少八个字母！" })
+    .regex(/^\S*$/, { message: "密码不得包含空格！" }),
+
+  email: z.string()
+    .email({ message: "邮箱格式不正确！" })
+    .regex(/^\S*$/, { message: "邮箱不得包含空格！" }),
+}).refine((data) => data.password === data.passwordVerify, {
+  path: ['passwordVerify'],
+  message: '密码和确认密码必须一致！',
+});
 
 const Login = () => {
   const { toast } = useToast()
@@ -49,11 +71,50 @@ const Login = () => {
     },
   })
 
+  const signUpForm = useForm<z.infer<typeof signUpFormSchema>>({
+    resolver: zodResolver(signUpFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      passwordVerify: ""
+    },
+  })
+
+  useEffect(() => {
+    if (!isSignUpOpen) {
+      signUpForm.reset({
+        name: "",
+        email: "",
+        password: "",
+        passwordVerify: ""
+      });
+    }
+  }, [isSignUpOpen])
+
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       await signin(data.username, data.password);
 
+      window.location.href = '/dashboard';
+    } catch (error: any) {
+      return toast({
+        variant: "destructive",
+        title: error.message,
+        duration: 1500
+      })
+    }
+  }
+
+  const signUpSubmit = async (data: z.infer<typeof signUpFormSchema>) => {
+    try {
+      await signup({
+        name: data.name,
+        email: data.email,
+        password: data.password
+      });
+      setIsSignUpOpen(false)
       window.location.href = '/dashboard';
     } catch (error: any) {
       return toast({
@@ -125,10 +186,10 @@ const Login = () => {
 
         <div className="py-10 flex justify-center items-center w-full font-bold text-center">
           <p>Don’t you have an account? </p>
-          <Button 
-               variant="link"
-               className="text-lg font-extrabold"
-               onClick={()=>setIsSignUpOpen(true)}
+          <Button
+            variant="link"
+            className="text-lg font-extrabold"
+            onClick={() => setIsSignUpOpen(true)}
           >
             Sign up
           </Button>
@@ -140,13 +201,68 @@ const Login = () => {
             <DialogHeader>
               <DialogTitle>欢迎注册</DialogTitle>
               <DialogDescription>
-                 由于学习需要，后续界面将以英文为主哦～
+                由于学习需要，后续界面将以英文为主哦～
               </DialogDescription>
             </DialogHeader>
-          
-            <DialogFooter>
-              <Button type="submit" className="px-5">确认</Button>
-            </DialogFooter>
+            <Form {...signUpForm}>
+              <form onSubmit={signUpForm.handleSubmit(signUpSubmit)} className="p-3 space-y-3">
+                <FormField
+                  control={signUpForm.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>名称</FormLabel>
+                      <FormControl>
+                        <Input placeholder="输入名称" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={signUpForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="w-[25%] text-nowrap text-base">邮箱</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="输入邮箱" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={signUpForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>密码</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="输入密码" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={signUpForm.control}
+                  name="passwordVerify"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>再次输入密码</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="再次输入密码" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="py-3">
+                  <Button type="submit" className="px-10">确认</Button>
+                </div>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
 
