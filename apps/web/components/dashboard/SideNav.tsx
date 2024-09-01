@@ -1,9 +1,3 @@
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp"
 import Link from "next/link"
 import Image from "next/image";
 import { usePathname } from "next/navigation";

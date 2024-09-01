@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { User, editUser } from "@/api/user"
 import { useEffect, useState } from "react"
+import * as React from "react";
 import { useToast } from "@/components/ui/use-toast"
 
 const defaultUserData = {
@@ -145,8 +146,8 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
               <FormItem>
                 <FormLabel className="w-[25%] text-nowrap text-base">Gender</FormLabel>
                 <FormControl>
-                  <Select disabled={!isEdit} {...field}>
-                    <SelectTrigger className="w-[180px]">
+                  <Select disabled={!isEdit} value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger ref={field.ref} className="w-[180px]">
                       <SelectValue placeholder="male or female" />
                     </SelectTrigger>
                     <SelectContent>

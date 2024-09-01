@@ -49,7 +49,6 @@ export default function UploadImage({ onUpload, className = "" }: UploadImagePro
           alt="upload"
           width={30}
           height={30}
-          objectFit="cover"
         />
       </div>
       <div className="absolute opacity-0 flex justify-center items-center
@@ -62,7 +61,6 @@ export default function UploadImage({ onUpload, className = "" }: UploadImagePro
           alt="upload"
           width={30}
           height={30}
-          objectFit="cover"
         />
       </div>
 
