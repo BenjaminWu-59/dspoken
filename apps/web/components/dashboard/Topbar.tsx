@@ -32,7 +32,7 @@ const Topbar = () => {
   }, []);
 
   return (
-    <div className="px-8 py-5 flex justify-between items-center">
+    <div className="px-8 py-5 flex justify-between items-center border-b border-gray-300/45">
       <p className="text-2xl font-bold">
         {pathname?.charAt(0).toUpperCase() + pathname?.slice(1)}
       </p>

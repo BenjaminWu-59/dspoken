@@ -53,7 +53,6 @@ export default function Page() {
   };
 
   const handleImageUpload = (url: string) => {
-    console.log(111111)
     setAvatarUrl(url);
     setIsDialogOpen(true);  // 上传成功后立即打开弹窗
   };

@@ -12,10 +12,20 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { signin } from '@/api/auth';
-import { useRouter } from 'next/navigation';
 import { useToast } from "@/components/ui/use-toast"
+import { useState } from "react";
 
 
 const FormSchema = z.object({
@@ -29,6 +39,8 @@ const FormSchema = z.object({
 
 const Login = () => {
   const { toast } = useToast()
+  const [isSignUpOpen, setIsSignUpOpen] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -37,7 +49,6 @@ const Login = () => {
     },
   })
 
-  const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
@@ -52,6 +63,7 @@ const Login = () => {
       })
     }
   }
+
 
   return (
     <div className="flex h-screen">
@@ -79,8 +91,6 @@ const Login = () => {
           />
           <span className="pl-3 text-5xl font-zain font-extrabold text-foreground/90">Daily Spoken</span>
         </div>
-
-        {/* 使用 shadcn 的 Form 组件创建登录表单 */}
 
         <Form  {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="pt-20 w-2/3 space-y-6">
@@ -113,10 +123,32 @@ const Login = () => {
         </Form>
 
 
-        <p className="py-10 w-full font-bold text-center">
-          Don’t you have an account? &nbsp;
-          <strong>Sign up</strong>
-        </p>
+        <div className="py-10 flex justify-center items-center w-full font-bold text-center">
+          <p>Don’t you have an account? </p>
+          <Button 
+               variant="link"
+               className="text-lg font-extrabold"
+               onClick={()=>setIsSignUpOpen(true)}
+          >
+            Sign up
+          </Button>
+
+        </div>
+
+        <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>欢迎注册</DialogTitle>
+              <DialogDescription>
+                 由于学习需要，后续界面将以英文为主哦～
+              </DialogDescription>
+            </DialogHeader>
+          
+            <DialogFooter>
+              <Button type="submit" className="px-5">确认</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
       </div>
     </div>
