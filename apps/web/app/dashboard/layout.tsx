@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <SideNav />
       <div className="flex-1">
         <Topbar />
-        <div className="p-5 flex-grow">{children}</div>
+        <div className="p-8 flex-grow">{children}</div>
       </div>
     </section>
   );

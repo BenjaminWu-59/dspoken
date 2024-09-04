@@ -37,7 +37,7 @@ const SideNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col w-1/4 h-full border-r border-gray-300/45">
+    <nav className="flex flex-col w-max-[350px] h-full border-r border-gray-300/45">
       <div className="p-10">
         <Link href="/" className="mr-2 flex items-center space-x-1">
           <Image
