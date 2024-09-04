@@ -41,52 +41,6 @@ import {
 } from "@/components/ui/table"
 import { Sentence, testLibraryData } from "@/lib/library.test"
 
-export const columns: ColumnDef<Sentence>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "number",
-    header: "Number",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("number")}</div>
-    ),
-  },
-  {
-    accessorKey: "sentence",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Sentence
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("sentence")}</div>,
-  },
-]
 
 const Page = () => {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -124,6 +78,14 @@ const Page = () => {
           value={(table.getColumn("sentence")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("sentence")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+         <Input
+          placeholder="Filter number..."
+          value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("number")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -205,31 +167,56 @@ const Page = () => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+          pagination
       </div>
     </div>
   )
 }
 
 export default Page
+
+
+export const columns: ColumnDef<Sentence>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "number",
+    header: "Number",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("number")}</div>
+    ),
+  },
+  {
+    accessorKey: "sentence",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+        >
+          Sentence
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("sentence")}</div>,
+  },
+]
