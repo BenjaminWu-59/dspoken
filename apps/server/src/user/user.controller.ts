@@ -17,14 +17,14 @@ export class UserController {
   @Get('me')
   getMe(@GetUser() user: User) {  //, @GetUser('email') email: string
     // 请求变成GetUser装饰器，这里将带参数的第二个GetUser返回，我们可以直接拿到对应的字段的值
-    console.log("user/me:", user)
+    // console.log("user/me:", user)
 
     return user
   }
 
   @Patch()
   editUser(
-    @GetUser('id') userId: number, //这里的id由JwtGuard解析
+    @GetUser('id') userId: string, //这里的id由JwtGuard解析
     @Body() dto: EditUserDto
   ){
     return this.userService.editUser(userId, dto)

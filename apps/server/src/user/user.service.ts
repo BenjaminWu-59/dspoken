@@ -8,7 +8,7 @@ export class UserService {
   constructor(private prisma: PrismaService) { }
 
   async editUser(
-    userId: number,
+    userId: string,
     dto: EditUserDto
   ) {
     try {

@@ -82,7 +82,7 @@ export class AuthService {
 
   /*--------- 用户鉴权 ----------*/ // 新增代码
   async signToken(
-    userId: number,
+    userId: string,
     email: string
   ): Promise<{ access_token: string }> {
     const payload = {

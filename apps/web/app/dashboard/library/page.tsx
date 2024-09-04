@@ -52,7 +52,7 @@ const Page = () => {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data:testLibraryData,
+    data: testLibraryData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -73,22 +73,24 @@ const Page = () => {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter sentence..."
-          value={(table.getColumn("sentence")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("sentence")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-         <Input
-          placeholder="Filter number..."
-          value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("number")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="flex space-x-2">
+          <Input
+            placeholder="Filter sentence..."
+            value={(table.getColumn("sentence")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("sentence")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Input
+            placeholder="Filter number..."
+            value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("number")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -167,7 +169,11 @@ const Page = () => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-          pagination
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        pagination
       </div>
     </div>
   )
@@ -212,11 +218,40 @@ export const columns: ColumnDef<Sentence>[] = [
       return (
         <Button
           variant="ghost"
+          className="w-full"
         >
           Sentence
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("sentence")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("sentence")}</div>,
+  },
+  {
+    accessorKey: "hint",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="w-full"
+        >
+          Hint
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("hint")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="w-full"
+        >
+          Status
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("status")}</div>,
   },
 ]

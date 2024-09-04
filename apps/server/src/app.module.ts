@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { FileModule } from './file/file.module';
+import { LibraryModule } from './library/library.module';
 
 
 @Module({
@@ -14,6 +15,7 @@ import { FileModule } from './file/file.module';
     PrismaModule,
     AuthModule, 
     UserModule,
+    LibraryModule,
     FileModule
   ]
 })

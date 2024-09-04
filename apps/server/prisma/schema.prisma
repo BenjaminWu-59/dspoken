@@ -14,34 +14,72 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   email String @unique
-  hash String
+  hash  String
 
-  name  String? @unique
+  name   String? @unique
   phone  String?
   gender String? // male; female
   age    Int?
   avatar String?
 
   MemberVip MemberVip[]
+  Library   Library[]
+  Classes   Classes[]
 
   @@map("users")
 }
 
 model MemberVip {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  level    Int // 0 - 普通会员； 1 - vip会员； 2 - 终身会员 
+  level    Int
   timeLeft DateTime?
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   @@map("membervip")
+}
+
+// ---------- Library 相关 -----------
+model Library {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  number    Int
+  hint      String
+  sentence  String
+  audioUrl  String?
+  review    String? 
+  status    String?  
+  classId   String?
+  class     Classes?  @relation(fields: [classId], references: [id]) 
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("library")
+}
+
+model Classes {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name      String
+  note      String?
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  libraries Library[]
+
+  @@map("classes")
 }
