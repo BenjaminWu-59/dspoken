@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useEffect, useState } from "react"
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -39,10 +40,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Sentence, testLibraryData } from "@/lib/library.test"
+// import { Sentence, testLibraryData } from "@/lib/library.test"
+import {Library, getLibrary} from "@/api/library"
 
 
 const Page = () => {
+  // data get
+  const [Libraries, setLibraries] = useState<Library[]>([]);
+
+  useEffect(() => {
+    const fetchLibraries = async () => {
+      try {
+        const resData = await getLibrary();
+        
+        if (resData?.statusCode === 200 && resData.data) {
+          setLibraries(resData.data); 
+        } else {
+          setLibraries([]); 
+        }
+      } catch (error) {
+        console.error('获取库数据时出错:', error);
+        setLibraries([]);  
+      }
+    };
+
+    fetchLibraries();
+  }, []); 
+
+  
+
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -52,7 +78,7 @@ const Page = () => {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data: testLibraryData,
+    data: Libraries,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -182,7 +208,7 @@ const Page = () => {
 export default Page
 
 
-export const columns: ColumnDef<Sentence>[] = [
+const columns: ColumnDef<Library>[] = [
   {
     id: "select",
     header: ({ table }) => (

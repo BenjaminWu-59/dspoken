@@ -1,4 +1,4 @@
-export type Sentence = {
+export type Library = {
   id: string;
   number: number;
   userId: string;
@@ -8,12 +8,12 @@ export type Sentence = {
   review: "0" | "1" | "2" | "3" | "4" | "5" | "7" | "15";
   status: "pre" | "ing" | "end",
   classId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 
-export const testLibraryData: Sentence[] = [
+export const testLibraryData: Library[] = [
   {
     id: "1",
     number: 1,
@@ -24,8 +24,8 @@ export const testLibraryData: Sentence[] = [
     review: "0",
     status: "pre",
     classId: "default",
-    createdAt: new Date("2024-08-30T07:26:07.539Z"),
-    updatedAt: new Date("2024-08-30T07:26:07.539Z")
+    createdAt: "2024-08-30T07:26:07.539Z",
+    updatedAt: "2024-08-30T07:26:07.539Z"
   },
   {
     id: "2",
@@ -37,8 +37,8 @@ export const testLibraryData: Sentence[] = [
     review: "0",
     status: "pre",
     classId: "default",
-    createdAt: new Date("2024-08-30T07:26:07.539Z"),
-    updatedAt: new Date("2024-08-30T07:26:07.539Z")
+    createdAt: "2024-08-30T07:26:07.539Z",
+    updatedAt: "2024-08-30T07:26:07.539Z"
   },
   {
     id: "3",
@@ -50,8 +50,8 @@ export const testLibraryData: Sentence[] = [
     review: "0",
     status: "pre",
     classId: "default",
-    createdAt: new Date("2024-08-30T07:26:07.539Z"),
-    updatedAt: new Date("2024-08-30T07:26:07.539Z")
+    createdAt: "2024-08-30T07:26:07.539Z",
+    updatedAt: "2024-08-30T07:26:07.539Z"
   },
   {
     id: "4",
@@ -63,8 +63,8 @@ export const testLibraryData: Sentence[] = [
     review: "0",
     status: "pre",
     classId: "default",
-    createdAt: new Date("2024-08-30T07:26:07.539Z"),
-    updatedAt: new Date("2024-08-30T07:26:07.539Z")
+    createdAt: "2024-08-30T07:26:07.539Z",
+    updatedAt: "2024-08-30T07:26:07.539Z"
   },
   {
     id: "5",
@@ -76,7 +76,7 @@ export const testLibraryData: Sentence[] = [
     review: "0",
     status: "pre",
     classId: "default",
-    createdAt: new Date("2024-08-30T07:26:07.539Z"),
-    updatedAt: new Date("2024-08-30T07:26:07.539Z")
+    createdAt: "2024-08-30T07:26:07.539Z",
+    updatedAt: "2024-08-30T07:26:07.539Z"
   }
 ]
