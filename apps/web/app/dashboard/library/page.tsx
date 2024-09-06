@@ -2,11 +2,7 @@
 
 import * as React from "react"
 import { useEffect, useState } from "react"
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
+import { ChevronDownIcon } from "@radix-ui/react-icons"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -26,9 +22,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -40,45 +33,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-// import { Sentence, testLibraryData } from "@/lib/library.test"
-import {Library, getLibrary} from "@/api/library"
-
+import { Library, getLibrary } from "@/api/library"
 
 const Page = () => {
-  // data get
-  const [Libraries, setLibraries] = useState<Library[]>([]);
+  const [libraries, setLibraries] = useState<Library[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   useEffect(() => {
     const fetchLibraries = async () => {
       try {
         const resData = await getLibrary();
-        
-        if (resData?.statusCode === 200 && resData.data) {
-          setLibraries(resData.data); 
-        } else {
-          setLibraries([]); 
-        }
+        setLibraries(resData?.statusCode === 200 && resData.data ? resData.data : []);
       } catch (error) {
         console.error('获取库数据时出错:', error);
-        setLibraries([]);  
+        setLibraries([]);
       }
     };
-
     fetchLibraries();
-  }, []); 
-
-  
-
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  }, []);
 
   const table = useReactTable({
-    data: Libraries,
+    data: libraries,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -88,12 +66,7 @@ const Page = () => {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+    state: { sorting, columnFilters, columnVisibility, rowSelection },
   })
 
   return (
@@ -206,7 +179,6 @@ const Page = () => {
 }
 
 export default Page
-
 
 const columns: ColumnDef<Library>[] = [
   {
