@@ -41,11 +41,13 @@ export class addLibraryDto {
 
   @IsString()
   @IsOptional()
-  review: "0" | "1" | "2" | "3" | "4" | "5" | "7" | "15";
+  @IsIn(['pre', 'ing', 'end'])
+  status: string;
 
   @IsString()
   @IsOptional()
-  status: "pre" | "ing" | "end";
+  @IsIn(['0', '1', '2', '3', '4', '5', '7', '15'])
+  review: string;
 
   @IsString()
   @IsOptional()
