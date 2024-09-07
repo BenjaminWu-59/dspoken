@@ -1,13 +1,19 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber, isNotEmpty, IsInt, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsNumber, isNotEmpty, IsInt, Min, IsIn } from 'class-validator';
 
-export class getLibraryDto{
+export class getLibraryDto {
   @IsString()
   @IsOptional()
   sentence: string;
 
   @IsString()
   @IsOptional()
-  status: "pre" | "ing" | "end";
+  @IsIn(['pre', 'ing', 'end'])
+  status: string;
+
+  @IsString()
+  @IsOptional()
+  @IsIn(['0', '1', '2', '3', '4', '5', '7', '15'])
+  review: string;
 
   @IsString()
   @IsOptional()

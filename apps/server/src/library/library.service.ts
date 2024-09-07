@@ -7,29 +7,39 @@ export class LibraryService {
   constructor(private prisma: PrismaService) { }
 
   async getLibrary(userId: string, dto: getLibraryDto) {
-    const { classId = null, status = null, sentence = null, pageNo = 0, pageSize = 10 } = dto;
-    console.log("userId:", userId, "dto:", dto)
-
+    const { classId, status, review, sentence, pageNo = 0, pageSize = 10 } = dto;
+    
     try {
-      const libraries = await this.prisma.library.findMany({
-        where: {
-          userId: userId,
-          ...(classId ? { classId: classId } : {}),  // 仅在 classId 存在时添加
-          ...(status ? { status: status } : {}),     // 仅在 status 存在时添加
-          ...(sentence ? { sentence: { contains: sentence } } : {}),  // 仅在 sentence 存在时进行模糊搜索
-        },
-        skip: pageNo * pageSize,
-        take: pageSize,
-      });
-
+      const whereCondition = {
+        userId,
+        ...(classId && { classId }), // classId 存在时则作为条件
+        ...(status && { status }),
+        ...(review && { review }),
+        ...(sentence && { sentence: { contains: sentence } }),
+      };
+  
+      const [libraries, totalCount] = await Promise.all([
+        this.prisma.library.findMany({
+          where: whereCondition,
+          skip: pageNo * pageSize,
+          take: pageSize,
+        }),
+        this.prisma.library.count({ where: whereCondition })
+      ]);
+  
       return {
         statusCode: 200,
-        message: "Library get successful!",
-        data: libraries
-      }
+        message: "get library success!",
+        data: {
+          libraries,
+          totalCount,
+          pageNo,
+          pageSize
+        }
+      };
     } catch (error) {
-      console.log("library get error:", error)
-      return error
+      console.error("get library error:", error);
+      throw new Error("get library error");
     }
   }
 
