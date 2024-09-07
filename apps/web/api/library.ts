@@ -18,7 +18,7 @@ export interface ResData {
   statusCode: number;
   message: string;
   error?: string;
-  data?: Library[]
+  data?: any
 }
 
 export const getLibrary = async (): Promise<ResData> => {

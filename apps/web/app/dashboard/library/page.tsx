@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 import {
@@ -36,24 +37,33 @@ import {
 import { Library, getLibrary } from "@/api/library"
 
 const Page = () => {
-  const [libraries, setLibraries] = useState<Library[]>([]);
+  //  表格配置
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  useEffect(() => {
-    const fetchLibraries = async () => {
-      try {
-        const resData = await getLibrary();
-        setLibraries(resData?.statusCode === 200 && resData.data ? resData.data : []);
-      } catch (error) {
-        console.error('获取库数据时出错:', error);
-        setLibraries([]);
+
+  // 数据请求
+  const [libraries, setLibraries] = useState<Library[]>([])
+
+  const { data, isLoading, error } = useQuery<Library[]>({
+    queryKey: ['libraries'],
+    queryFn: async () => {
+      const res = await getLibrary();
+      if (res?.statusCode === 200 && res?.data?.libraries) {
+        return res.data.libraries;
       }
-    };
-    fetchLibraries();
-  }, []);
+      return [];
+    },
+    staleTime: Infinity, // 数据永不过期
+  })
+
+  useEffect(() => {
+    if (data) {
+      setLibraries(data)
+    }
+  }, [data])
 
   const table = useReactTable({
     data: libraries,
