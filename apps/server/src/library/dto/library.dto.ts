@@ -41,15 +41,5 @@ export class addLibraryDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(['pre', 'ing', 'end'])
-  status: string;
-
-  @IsString()
-  @IsOptional()
-  @IsIn(['0', '1', '2', '3', '4', '5', '7', '15'])
-  review: string;
-
-  @IsString()
-  @IsOptional()
   classId: string;
 }

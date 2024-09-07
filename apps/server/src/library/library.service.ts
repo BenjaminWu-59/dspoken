@@ -23,6 +23,17 @@ export class LibraryService {
           where: whereCondition,
           skip: pageNo * pageSize,
           take: pageSize,
+          select: {
+            id: true,
+            hint: true,
+            sentence: true,
+            number: true,
+            review: true,
+            status: true,
+            classId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
         }),
         this.prisma.library.count({ where: whereCondition })
       ]);

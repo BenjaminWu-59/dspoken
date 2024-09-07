@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 import {
@@ -34,6 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import CreateLibraryDialog from "@/components/library/CreateLibrary"
 import { Library, getLibrary } from "@/api/library"
 
 const Page = () => {
@@ -42,7 +43,6 @@ const Page = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
-
 
   // 数据请求
   const [libraries, setLibraries] = useState<Library[]>([])
@@ -58,6 +58,7 @@ const Page = () => {
     },
     staleTime: Infinity, // 数据永不过期
   })
+
 
   useEffect(() => {
     if (data) {
@@ -81,7 +82,7 @@ const Page = () => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <div className="flex space-x-2">
           <Input
             placeholder="Filter sentence..."
@@ -99,6 +100,7 @@ const Page = () => {
             }
             className="max-w-sm"
           />
+          <CreateLibraryDialog />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
