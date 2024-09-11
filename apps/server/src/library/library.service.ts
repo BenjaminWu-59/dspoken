@@ -1,6 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { getLibraryDto, addLibraryDto, updateLibraryDto } from "./dto";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 @Injectable({})
 export class LibraryService {
@@ -85,14 +86,16 @@ export class LibraryService {
         data: library
       }
     } catch (error) {
-      console.log("library create error:", error)
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ForbiddenException(error.meta)
+      }
       throw error
     }
   }
 
   async updateLibrary(userId: string, dto: updateLibraryDto) {
     try {
-     const library = await this.prisma.library.update({
+      const library = await this.prisma.library.update({
         where: {
           id: dto.id,
           userId
@@ -101,13 +104,36 @@ export class LibraryService {
           ...dto,
         }
       })
-      
+
       return {
         statusCode: 200,
         message: "update library success!",
       }
     } catch (error) {
-      console.log("library update error:", error)
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ForbiddenException(error.meta)
+      }
+      throw error
+    }
+  }
+
+  async deleteLibrary(userId: string, dto: { id: string }) {
+    try {
+      await this.prisma.library.delete({
+        where: {
+          id: dto.id,
+          userId
+        }
+      });
+
+      return {
+        statusCode: 200,
+        message: "delete library success!",
+      }
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ForbiddenException(error.meta)
+      }
       throw error
     }
   }

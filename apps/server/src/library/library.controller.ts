@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Patch, Post, UseGuards } from "@nestjs/common";
 import { GetUser } from "src/auth/decorator";
 import { JwtGuard } from "src/auth/guard";
 import { LibraryService } from "./library.service";
@@ -24,9 +24,15 @@ export class LibraryController {
     return this.libraryService.addLibrary(userId, dto)
   }
 
-  @HttpCode(HttpStatus.OK) // 决定返回状态的装饰器
+  @HttpCode(HttpStatus.OK)
   @Patch('/')
   async updateLibrary(@GetUser('id') userId: string, @Body() dto: updateLibraryDto) {
     return this.libraryService.updateLibrary(userId, dto)
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Delete('/')
+  async deleteLibrary(@GetUser('id') userId: string, @Body() dto: {id: string}) {
+    return this.libraryService.deleteLibrary(userId, dto)
   }
 }
