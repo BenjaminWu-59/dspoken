@@ -3,6 +3,10 @@ import { IsString, IsNotEmpty, IsOptional, IsNumber, isNotEmpty, IsInt, Min, IsI
 export class getLibraryDto {
   @IsString()
   @IsOptional()
+  id:string
+
+  @IsString()
+  @IsOptional()
   sentence: string;
 
   @IsString()
@@ -42,4 +46,33 @@ export class addLibraryDto {
   @IsString()
   @IsOptional()
   classId: string;
+}
+
+
+export class updateLibraryDto{
+  @IsString()
+  @IsNotEmpty()
+  id:string
+
+  @IsString()
+  @IsOptional()
+  hint: string;
+
+  @IsString()
+  @IsOptional()
+  sentence: string;
+
+  @IsString()
+  @IsOptional()
+  classId: string;
+
+  @IsString()
+  @IsOptional()
+  @IsIn(['pre', 'ing', 'end'])
+  status: string;
+
+  @IsString()
+  @IsOptional()
+  @IsIn(['0', '1', '2', '3', '4', '5', '7', '15'])
+  review: string;
 }

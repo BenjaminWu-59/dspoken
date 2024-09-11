@@ -1,23 +1,24 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { getLibraryDto, addLibraryDto } from "./dto";
+import { getLibraryDto, addLibraryDto, updateLibraryDto } from "./dto";
 
 @Injectable({})
 export class LibraryService {
   constructor(private prisma: PrismaService) { }
 
   async getLibrary(userId: string, dto: getLibraryDto) {
-    const { classId, status, review, sentence, pageNo = 0, pageSize = 10 } = dto;
-    
+    const { id, classId, status, review, sentence, pageNo = 0, pageSize = 10 } = dto;
+
     try {
       const whereCondition = {
         userId,
+        ...(id && { id }),
         ...(classId && { classId }), // classId 存在时则作为条件
         ...(status && { status }),
         ...(review && { review }),
         ...(sentence && { sentence: { contains: sentence } }),
       };
-  
+
       const [libraries, totalCount] = await Promise.all([
         this.prisma.library.findMany({
           where: whereCondition,
@@ -37,7 +38,7 @@ export class LibraryService {
         }),
         this.prisma.library.count({ where: whereCondition })
       ]);
-  
+
       return {
         statusCode: 200,
         message: "get library success!",
@@ -85,6 +86,28 @@ export class LibraryService {
       }
     } catch (error) {
       console.log("library create error:", error)
+      throw error
+    }
+  }
+
+  async updateLibrary(userId: string, dto: updateLibraryDto) {
+    try {
+     const library = await this.prisma.library.update({
+        where: {
+          id: dto.id,
+          userId
+        },
+        data: {
+          ...dto,
+        }
+      })
+      
+      return {
+        statusCode: 200,
+        message: "update library success!",
+      }
+    } catch (error) {
+      console.log("library update error:", error)
       throw error
     }
   }
