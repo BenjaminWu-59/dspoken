@@ -18,6 +18,7 @@ export const uploadImage = async (file: File): Promise<any> => {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('path', "avatar");
 
     const res = await fetch('http://localhost:5002/api/file/upload', {
       method: 'POST',

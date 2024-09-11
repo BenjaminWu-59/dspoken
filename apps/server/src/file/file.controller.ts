@@ -6,7 +6,8 @@ import {
   UploadedFile,
   HttpStatus,
   Param,
-  UseGuards
+  UseGuards,
+  Body
 } from '@nestjs/common';
 import {
   FileFilter,
@@ -22,41 +23,47 @@ import { JwtGuard } from "src/auth/guard";
 export class FileController {
   constructor(private config: ConfigService) { }
 
-  @UseGuards(JwtGuard) // 路由守卫提升，里面直接使用我们之前定义的JwtGuard类
+  @UseGuards(JwtGuard)
   @Post('upload')
   @FileFilter('file', {
     limits: {
-      fileSize: 1024 * 1024,
+      fileSize: 5 * 1024 * 1024, // 增加文件大小限制到5MB
     },
-    fileFilter: FiletypeFilter('image/jpeg', 'image/png'),
+    fileFilter: FiletypeFilter('image/jpeg', 'image/png', 'audio/mpeg'),
   })
-  fileUpload(@UploadedFile() file) {
+  async fileUpload(@UploadedFile() file, @Body('path') customPath: string) {
+    const uploadDir = this.config.get<string>('UPLOAD_FILE');
+    let filePath = uploadDir;
+
+    if (customPath) {
+      filePath = path.join(uploadDir, customPath);
+      await fs.promises.mkdir(filePath, { recursive: true });
+    }
+
+    const fullPath = path.join(filePath, file.filename);
+    await fs.promises.rename(file.path, fullPath);
+
     return {
       statusCode: 200,
-      message: 'File uploaded successfully',
-      filename: this.config.get("DEFAULT_URL") + "file/" + file.filename,
+      message: '文件上传成功',
+      filename: this.config.get("DEFAULT_URL") + "file/" + (customPath ? customPath + '/' : '') + file.filename,
     };
   }
 
-  @Get('/:filename')
-  getFile(@Param('filename') filename: string, @Res() res: Response) {
+  @Get('/:filename(*)')
+  async getFile(@Param('filename') filename: string, @Res() res: Response) {
     const uploadDir = this.config.get<string>('UPLOAD_FILE');
-    const filePath = path.join(uploadDir, filename); // 假设你要读取的文件名是 avatar_1.jpg
+    const filePath = path.join(uploadDir, filename);
 
-    // 检查文件是否存在
-    if (fs.existsSync(filePath)) {
+    if (await fs.promises.access(filePath).then(() => true).catch(() => false)) {
       const fileStream = fs.createReadStream(filePath);
-
-      // 设置响应头，根据文件类型调整 Content-Type
-      res.setHeader('Content-Type', 'image/jpg');
-
-      // 将文件流通过响应发送
+      const mimeType = path.extname(filePath) === '.mp3' ? 'audio/mpeg' : 'image/jpg';
+      res.setHeader('Content-Type', mimeType);
       fileStream.pipe(res);
     } else {
-      // 如果文件不存在，返回 404 错误
       res.status(HttpStatus.NOT_FOUND).send({
         statusCode: HttpStatus.NOT_FOUND,
-        error: "Fail to Found",
+        error: "未找到文件",
         message: '文件不存在',
       });
     }

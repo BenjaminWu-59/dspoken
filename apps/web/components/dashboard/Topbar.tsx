@@ -12,13 +12,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "../ui/button";
 import { signout } from "@/api/auth";
 import { getUser, User } from '@/api/user';
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const Topbar = () => {
+  const router = useRouter();
   const pathname: string = usePathname().split('/').pop() || ""
 
   const [user, setUser] = useState<User | null>(null);
@@ -55,7 +56,7 @@ const Topbar = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/dashboard/account')}>
                 Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
