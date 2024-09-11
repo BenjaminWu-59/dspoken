@@ -22,6 +22,11 @@ const defaultDashRoute: DashRoute[] = [
     icon: "speak"
   },
   {
+    name: "Listening",
+    href: "/dashboard/listening",
+    icon: "speak"
+  },
+  {
     name: "Account",
     href: "/dashboard/account",
     icon: "profile"
