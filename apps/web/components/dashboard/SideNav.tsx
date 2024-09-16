@@ -17,16 +17,6 @@ const defaultDashRoute: DashRoute[] = [
     icon: "library"
   },
   {
-    name: "Speaking",
-    href: "/dashboard/speaking",
-    icon: "speak"
-  },
-  {
-    name: "Listening",
-    href: "/dashboard/listening",
-    icon: "speak"
-  },
-  {
     name: "Account",
     href: "/dashboard/account",
     icon: "profile"
@@ -53,7 +43,7 @@ const SideNav = () => {
             height={30}
             priority
           />
-          <span className="pl-1 text-4xl font-zain font-extrabold text-foreground/80">Daily Spoken</span>
+          <span className="pl-1 text-4xl font-zain font-extrabold text-foreground/80">Daily Store</span>
         </Link>
       </div>
       <div className="flex flex-col justify-center">

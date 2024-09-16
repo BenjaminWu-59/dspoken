@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 
 
 const SiteHeader = () => {
-
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,15 +29,9 @@ const SiteHeader = () => {
 
   return (
     <header className="z-20 top-0 w-full px-2 py-5 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex items-center h-14 max-w-screen-3xl">
+      <div className="p-10 flex justify-between h-14">
         <TopNav />
-        <div className="flex flex-1 items-center justify-end space-x-2">
-          {user ? (
-            <Link href="/dashboard/speaking" passHref>
-              <Button className="mr-4">Start Speaking</Button>
-            </Link>
-          ) : (<></>)}
-
+        <div className="flex justify-end items-center">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

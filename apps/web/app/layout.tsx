@@ -9,7 +9,7 @@ import Providers from "./providers"
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "BenPage",
+  title: "Daily Store",
   description: "A wallpage collect tools!",
 };
 

@@ -8,7 +8,6 @@ const GlobalSearch = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("搜索值:", event.target.value)
     setSearchValue(event.target.value);
   };
 

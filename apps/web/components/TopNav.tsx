@@ -18,7 +18,7 @@ const TopNav = () => {
           height={30}
           priority
         />
-        <span className="pl-1 text-4xl font-zain font-extrabold text-foreground/80">Daily Spoken</span>
+        <span className="pl-1 text-4xl font-zain font-extrabold text-foreground/80">Daily Store</span>
       </Link>
       <Link
         href="/"

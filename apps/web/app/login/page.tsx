@@ -147,7 +147,7 @@ const Login = () => {
             height={50}
             priority
           />
-          <span className="pl-3 text-5xl font-zain font-extrabold text-foreground/90">Daily Spoken</span>
+          <span className="pl-3 text-5xl font-zain font-extrabold text-foreground/90">Daily Store</span>
         </div>
 
         <Form  {...form}>
