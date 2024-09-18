@@ -9,11 +9,11 @@ export interface Library {
   sentence?: string,
   audioUrl?: null,
   review?: "0" | "1" | "2" | "3" | "4" | "5" | "7" | "15",
-  status?:  "pre" | "ing" | "end",
+  status?: "pre" | "ing" | "end",
   classId?: string,
 }
 
-export interface AddLibrary{
+export interface AddLibrary {
   hint: string;
   sentence: string,
   classId: string,
@@ -23,7 +23,12 @@ export interface ResData {
   statusCode: number;
   message: string;
   error?: string;
-  data?: any
+  data?: {
+    libraries: Library[];
+    totalCount: number;
+    pageNo: number;
+    pageSize: number
+  }
 }
 
 export const getLibrary = async (): Promise<ResData> => {
@@ -39,7 +44,7 @@ export const getLibrary = async (): Promise<ResData> => {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-      },
+      }
     });
 
     if (!res.ok) {
@@ -48,7 +53,7 @@ export const getLibrary = async (): Promise<ResData> => {
 
     const data: ResData = await res.json();
     return data;
-  }catch(error){
+  } catch (error) {
     console.error('getLibrary error:', error);
     throw error;
   }

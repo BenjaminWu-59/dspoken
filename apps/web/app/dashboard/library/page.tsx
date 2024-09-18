@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 import {
@@ -35,10 +35,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import CreateLibraryDialog from "@/components/library/CreateLibrary"
-import { Library, getLibrary } from "@/api/library"
+import { Library, getLibrary, ResData } from "@/api/library"
+import { QueryPagination } from "@/components/dashboard/QueryPagination"
 
 const Page = () => {
-  //  表格配置
+  // 表格配置
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -47,24 +48,22 @@ const Page = () => {
   // 数据请求
   const [libraries, setLibraries] = useState<Library[]>([])
 
-  const { data, isLoading, error } = useQuery<Library[]>({
+  const { data } = useQuery<ResData>({
     queryKey: ['libraries'],
-    queryFn: async () => {
-      const res = await getLibrary();
-      if (res?.statusCode === 200 && res?.data?.libraries) {
-        return res.data.libraries;
-      }
-      return [];
-    },
+    queryFn: getLibrary, // 直接调用 getLibrary
     staleTime: Infinity, // 数据永不过期
   })
 
-
   useEffect(() => {
     if (data) {
-      setLibraries(data)
+      setLibraries(data.data?.libraries || []); // 更新为 data.data.libraries
     }
   }, [data])
+
+  // 获取分页信息
+  const totalCount = data?.data?.totalCount || 0; // 获取总数
+  const pageNo = (data?.data?.pageNo ?? 0) + 1 || 1; // 获取当前页，注意加1以适应前端显示
+  const pageSize = data?.data?.pageSize || 10; // 获取每页大小
 
   const table = useReactTable({
     data: libraries,
@@ -89,14 +88,6 @@ const Page = () => {
             value={(table.getColumn("sentence")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("sentence")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Input
-            placeholder="Filter number..."
-            value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("number")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -179,12 +170,17 @@ const Page = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        pagination
+        <QueryPagination
+          total={totalCount} // 使用 API 返回的总数
+          pageNo={pageNo} // 使用 API 返回的 pageNo，注意加1以适应前端显示
+          pageSize={pageSize} // 使用 API 返回的 pageSize
+          className="justify-end mt-4"
+        />
       </div>
     </div>
   )
