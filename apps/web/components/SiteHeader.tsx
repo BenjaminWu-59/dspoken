@@ -53,7 +53,7 @@ const SiteHeader = () => {
                   <Button className="custom-button"
                     onClick={() => signout()}
                   >
-                    Sign Out
+                    退出
                   </Button>
                 </div>
 
@@ -61,7 +61,7 @@ const SiteHeader = () => {
             </DropdownMenu>
           ) : (
             <Link href="/login" passHref>
-              <Button variant="outline">Sign In</Button>
+              <Button variant="outline">登陆</Button>
             </Link>
           )}
         </div>

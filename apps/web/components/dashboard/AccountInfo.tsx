@@ -105,7 +105,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="w-[25%] text-nowrap text-base">Name</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">姓名</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} placeholder="name" {...field} />
                 </FormControl>
@@ -118,7 +118,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="w-[25%] text-nowrap text-base">Email</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">邮箱</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} type="email" placeholder="Email" {...field} />
                 </FormControl>
@@ -131,7 +131,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="phone"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel className="w-[25%] text-nowrap text-base">Phone</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">电话</FormLabel>
                 <FormControl>
                   <Input disabled={!isEdit} placeholder="phone" {...field} />
                 </FormControl>
@@ -144,7 +144,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="gender"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="w-[25%] text-nowrap text-base">Gender</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">性别</FormLabel>
                 <FormControl>
                   <Select disabled={!isEdit} value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger ref={field.ref} className="w-[180px]">
@@ -165,7 +165,7 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
             name="age"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="w-[25%] text-nowrap text-base">Age</FormLabel>
+                <FormLabel className="w-[25%] text-nowrap text-base">年龄</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -181,17 +181,17 @@ const AccountInfo = ({ user }: AccountInfoProps) => {
           />
           {
             isEdit ? (<div className="flex space-x-7">
-              <Button type="submit" className="px-10 custom-button">Confirm</Button>
+              <Button type="submit" className="px-10 custom-button">确认</Button>
               <Button className="px-10"
                 onClick={handleCancel}
               >
-                Cancel
+                取消
               </Button>
             </div>) : (
               <Button className="px-10 custom-button"
                 onClick={() => setIsEdit(true)}
               >
-                Edit
+                编辑
               </Button>
             )
           }

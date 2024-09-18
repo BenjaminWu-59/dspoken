@@ -158,7 +158,7 @@ const Login = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Email or UserName" {...field} />
+                    <Input placeholder="邮箱 或 用户名" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -170,25 +170,25 @@ const Login = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Password" {...field} />
+                    <Input placeholder="密码" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Log in</Button>
+            <Button type="submit" className="w-full">登陆</Button>
           </form>
         </Form>
 
 
         <div className="py-10 flex justify-center items-center w-full font-bold text-center">
-          <p>Don’t you have an account? </p>
+          <p>您还没有账号? </p>
           <Button
             variant="link"
             className="text-lg font-extrabold"
             onClick={() => setIsSignUpOpen(true)}
           >
-            Sign up
+            注册
           </Button>
 
         </div>
@@ -197,9 +197,6 @@ const Login = () => {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>欢迎注册</DialogTitle>
-              <DialogDescription>
-                由于学习需要，后续界面将以英文为主哦～
-              </DialogDescription>
             </DialogHeader>
             <Form {...signUpForm}>
               <form onSubmit={signUpForm.handleSubmit(signUpSubmit)} className="p-3 space-y-3">
