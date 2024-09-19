@@ -4,10 +4,10 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationLink
 } from "@/components/ui/pagination"
+import { Button } from "../ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 // 新增 PaginationDemo 组件
 const QueryPagination: React.FC<{ pageNo: number; setPageNo: (page: number) => void; totalPages: number }> = ({ pageNo, setPageNo, totalPages }) => {
@@ -15,7 +15,9 @@ const QueryPagination: React.FC<{ pageNo: number; setPageNo: (page: number) => v
     <Pagination className="flex justify-end">
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious onClick={() => setPageNo(Math.max(pageNo - 1, 0))} />
+          <Button variant="outline" size="icon" onClick={() => setPageNo(Math.max(pageNo - 1, 0))}>
+            <ChevronLeftIcon className="h-4 w-4" />
+          </Button>
         </PaginationItem>
         {[...Array(totalPages)].map((_, index) => (
           <PaginationItem key={index}>
@@ -29,7 +31,9 @@ const QueryPagination: React.FC<{ pageNo: number; setPageNo: (page: number) => v
           </PaginationItem>
         ))}
         <PaginationItem>
-          <PaginationNext onClick={() => setPageNo(Math.min(pageNo + 1, totalPages - 1))} />
+          <Button variant="outline" size="icon" onClick={() => setPageNo(Math.min(pageNo + 1, totalPages - 1))}>
+            <ChevronRightIcon className="h-4 w-4" />
+          </Button>
         </PaginationItem>
       </PaginationContent>
     </Pagination>

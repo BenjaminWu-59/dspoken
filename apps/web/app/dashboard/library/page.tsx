@@ -14,10 +14,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import {
   Table,
   TableBody,
@@ -26,8 +33,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import CreateLibraryDialog from "@/components/library/CreateLibrary"
-import { Library, getLibrary } from "@/api/library"
+import { Library, getLibrary, deleteLibrary } from "@/api/library"
 import QueryPagination from "@/components/dashboard/QueryPagination"
 
 const Page = () => {
@@ -81,6 +91,7 @@ const Page = () => {
     onRowSelectionChange: setRowSelection,
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   })
+  
 
   return (
     <div className="w-full">
@@ -237,5 +248,56 @@ const columns: ColumnDef<Library>[] = [
     },
     cell: ({ row }) => <div className="lowercase text-center">{row.getValue("status")}</div>,
   },
+  {
+    id: "actions",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="w-full"
+        >
+          操作
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="flex justify-center space-x-2">
+        <Button onClick={() => handleEdit(row.original)}>编辑</Button>
+
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">删除</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>您确定要删除这条知识吗？</AlertDialogTitle>
+              <AlertDialogDescription>
+                删除后的信息将无法恢复，请你仔细考虑再进行删除！
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>取消</AlertDialogCancel>
+              <AlertDialogAction onClick={() => handleDelete(row.original)}>确定</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    ),
+  },
 ]
 
+// 添加处理函数
+const handleEdit = (library: Library) => {
+  console.log("编辑library：", library)
+}
+
+
+// 处理删除
+const handleDelete = async (library: Library) => {
+  if (library.id) {
+    await deleteLibrary(library.id);
+  } else {
+    console.error("Library ID 不存在");
+  }
+}

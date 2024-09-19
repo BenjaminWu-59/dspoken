@@ -50,7 +50,7 @@ export const getLibrary = async (queryParams: {
       ...(queryParams.pageNo != null && { pageNo: queryParams.pageNo.toString() }),
       ...(queryParams.pageSize != null && { pageSize: queryParams.pageSize.toString() }),
     }).toString();
-    
+
     const res = await fetch(`http://localhost:5002/api/library?${params}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${accessToken}` }
@@ -80,6 +80,35 @@ export const addLibrary = async (libraryData: Partial<AddLibrary>): Promise<ResD
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(libraryData),
+    });
+
+    if (!res.ok) {
+      throw res;
+    }
+
+    const data: ResData = await res.json();
+    return data;
+  } catch (error) {
+    console.error('addLibrary error:', error);
+    throw error;
+  }
+}
+
+export const deleteLibrary = async (id: string): Promise<ResData> => {
+  try {
+    const accessToken = Cookies.get('access_token');
+
+    if (!accessToken) {
+      throw Error("登录权限过期，请重新登录！")
+    }
+
+    const res = await fetch(`http://localhost:5002/api/library`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id: id}),
     });
 
     if (!res.ok) {
