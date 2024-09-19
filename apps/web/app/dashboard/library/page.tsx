@@ -86,7 +86,7 @@ const Page = () => {
       <div className="flex items-center justify-between py-4">
         <div className="flex space-x-2">
           <Input
-            placeholder="Filter sentence..."
+            placeholder="过滤知识..."
             value={queryParams.sentence} // 绑定输入框的值
             onChange={(event) => {
               setQueryParams({ ...queryParams, sentence: event.target.value }); // 更新句子状态
@@ -96,32 +96,6 @@ const Page = () => {
           />
           <CreateLibraryDialog />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -211,7 +185,7 @@ const columns: ColumnDef<Library>[] = [
   },
   {
     accessorKey: "number",
-    header: "Number",
+    header: "序号",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("number")}</div>
     ),
@@ -224,7 +198,7 @@ const columns: ColumnDef<Library>[] = [
           variant="ghost"
           className="w-full"
         >
-          Sentence
+          知识
         </Button>
       )
     },
@@ -238,7 +212,7 @@ const columns: ColumnDef<Library>[] = [
           variant="ghost"
           className="w-full"
         >
-          Hint
+          提示
         </Button>
       )
     },
@@ -252,7 +226,7 @@ const columns: ColumnDef<Library>[] = [
           variant="ghost"
           className="w-full"
         >
-          Status
+          状态
         </Button>
       )
     },

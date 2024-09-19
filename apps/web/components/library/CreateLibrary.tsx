@@ -44,13 +44,13 @@ export default function CreateLibraryDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">创建新条目</Button>
+        <Button variant="outline">创建知识</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>创建新的Library条目</DialogTitle>
+          <DialogTitle>创建新的知识条目</DialogTitle>
           <DialogDescription>
-            在这里填写新的Library条目的详细信息。
+            在这里填写新的知识条目的详细信息。
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
