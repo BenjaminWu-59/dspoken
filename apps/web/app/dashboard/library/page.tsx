@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { useEffect, useState } from "react"
-import { ChevronDownIcon } from "@radix-ui/react-icons"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,12 +17,6 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import {
   Table,
@@ -34,7 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import CreateLibraryDialog from "@/components/library/CreateLibrary"
-import { Library, getLibrary, ResData } from "@/api/library"
+import { Library, getLibrary } from "@/api/library"
+import QueryPagination from "@/components/dashboard/QueryPagination"
 
 const Page = () => {
   // 表格配置
@@ -43,28 +37,35 @@ const Page = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  // 数据请求
+  // 知识库数据
   const [libraries, setLibraries] = useState<Library[]>([])
 
+  // 数据总数
+  const [totalCount, setTotalCount] = useState(0);
 
+  // 搜索请求参数
   const [queryParams, setQueryParams] = useState<{ sentence: string; pageNo: number; pageSize: number }>({
-    sentence: "", 
-    pageNo: 0,    
-    pageSize: 10, 
+    sentence: "",
+    pageNo: 0,
+    pageSize: 10,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getLibrary(queryParams);
-        setLibraries(data.data?.libraries || []); // 更新为 data.data.libraries
+        setLibraries(data.data?.libraries || []);
+        setTotalCount(data.data?.totalCount || 0); // 设置总计数
       } catch (error) {
         console.error('获取数据错误:', error);
       }
     };
 
     fetchData();
-  }, [queryParams]); // 依赖于页码、每页大小和句子变化
+  }, [queryParams]);
+
+  // 计算总页数
+  const totalPages = Math.ceil(totalCount / queryParams.pageSize);
 
 
   const table = useReactTable({
@@ -152,7 +153,11 @@ const Page = () => {
           {table.getFilteredSelectedRowModel().rows.length} /{" "}
           {table.getFilteredRowModel().rows.length} 行被选择.
         </div>
-
+        <QueryPagination
+          pageNo={queryParams.pageNo}
+          setPageNo={(newPageNo) => setQueryParams({ ...queryParams, pageNo: newPageNo })}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   )
@@ -233,3 +238,4 @@ const columns: ColumnDef<Library>[] = [
     cell: ({ row }) => <div className="lowercase text-center">{row.getValue("status")}</div>,
   },
 ]
+

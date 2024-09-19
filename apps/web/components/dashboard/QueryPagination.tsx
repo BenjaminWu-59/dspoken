@@ -1,71 +1,39 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationPrevious,
   PaginationNext,
-} from "@/components/ui/pagination";
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
-interface QueryPaginationProps {
-  total: number;
-  pageNo: number; // 添加 pageNo
-  pageSize: number; // 添加 pageSize
-  className?: string;
-}
-
-export function QueryPagination({
-  total,
-  pageNo, // 接收 pageNo
-  pageSize, // 接收 pageSize
-  className,
-}: QueryPaginationProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const currentPage = pageNo; // 使用传入的 pageNo
-
-  const prevPage = currentPage - 1;
-  const nextPage = currentPage + 1;
-
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
-  };
-
+// 新增 PaginationDemo 组件
+const QueryPagination: React.FC<{ pageNo: number; setPageNo: (page: number) => void; totalPages: number }> = ({ pageNo, setPageNo, totalPages }) => {
   return (
-    <Pagination className={className}>
+    <Pagination className="flex justify-end">
       <PaginationContent>
-        {prevPage >= 1 ? (
-          <PaginationItem>
-            <PaginationPrevious href={createPageURL(prevPage)} />
-          </PaginationItem>
-        ) : null}
-
-        {Array.from({ length: Math.ceil(total / pageSize) }).map((_, index) => ( // 修改这里
-          <PaginationItem
-            className="hidden sm:inline-block"
-            key={`page-button-${index}`}
-          >
+        <PaginationItem>
+          <PaginationPrevious onClick={() => setPageNo(Math.max(pageNo - 1, 0))} />
+        </PaginationItem>
+        {[...Array(totalPages)].map((_, index) => (
+          <PaginationItem key={index}>
             <PaginationLink
-              isActive={currentPage === index + 1}
-              href={createPageURL(index + 1)}
+              href="#"
+              isActive={index === pageNo}
+              onClick={() => setPageNo(index)} // 点击时更新 pageNo
             >
               {index + 1}
             </PaginationLink>
           </PaginationItem>
         ))}
-
-        {nextPage <= Math.ceil(total / pageSize) ? ( // 修改这里
-          <PaginationItem>
-            <PaginationNext href={createPageURL(nextPage)} />
-          </PaginationItem>
-        ) : null}
+        <PaginationItem>
+          <PaginationNext onClick={() => setPageNo(Math.min(pageNo + 1, totalPages - 1))} />
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
-  );
+  )
 }
+
+export default QueryPagination
