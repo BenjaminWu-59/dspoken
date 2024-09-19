@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { GetUser } from "src/auth/decorator";
 import { JwtGuard } from "src/auth/guard";
 import { LibraryService } from "./library.service";
@@ -14,7 +14,8 @@ export class LibraryController {
 
   @HttpCode(HttpStatus.OK) 
   @Get('/')
-  async getLibrary(@GetUser('id') userId: string, @Body() dto: getLibraryDto) {
+  async getLibrary(@GetUser('id') userId: string, @Query() dto: getLibraryDto) {
+    console.log(dto)
     return this.libraryService.getLibrary(userId, dto)
   }
   

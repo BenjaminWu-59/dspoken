@@ -37,7 +37,7 @@ const SiteHeader = () => {
               <DropdownMenuTrigger asChild>
                 <div className="flex justify-center items-center">
                   <Image
-                    src="/avatar.png"
+                    src="/avatar.svg"
                     alt="avatar"
                     className="rounded-full"
                     width={50}

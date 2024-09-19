@@ -31,28 +31,34 @@ export interface ResData {
   }
 }
 
-export const getLibrary = async (): Promise<ResData> => {
+export const getLibrary = async (queryParams: {
+  id?: string;
+  sentence?: string;
+  status?: string;
+  review?: string;
+  classId?: string;
+  pageNo?: number;
+  pageSize?: number;
+}): Promise<ResData> => {
   try {
     const accessToken = Cookies.get('access_token');
+    if (!accessToken) throw Error("登陆权限过期，请重新登陆！");
 
-    if (!accessToken) {
-      // 如果没有 token，返回 null 或者处理无 token 的情况
-      throw Error("登陆权限过期，请重新登陆！")
-    }
-
-    const res = await fetch(`http://localhost:5002/api/library`, {
+    // 使用 URLSearchParams 构建查询字符串
+    const params = new URLSearchParams({
+      ...(queryParams.sentence != null && { sentence: queryParams.sentence.toString() }),
+      ...(queryParams.pageNo != null && { pageNo: queryParams.pageNo.toString() }),
+      ...(queryParams.pageSize != null && { pageSize: queryParams.pageSize.toString() }),
+    }).toString();
+    
+    const res = await fetch(`http://localhost:5002/api/library?${params}`, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      }
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     });
 
-    if (!res.ok) {
-      throw res
-    }
+    if (!res.ok) throw res;
 
-    const data: ResData = await res.json();
-    return data;
+    return await res.json();
   } catch (error) {
     console.error('getLibrary error:', error);
     throw error;

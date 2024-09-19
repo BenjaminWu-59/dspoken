@@ -36,7 +36,6 @@ import {
 } from "@/components/ui/table"
 import CreateLibraryDialog from "@/components/library/CreateLibrary"
 import { Library, getLibrary, ResData } from "@/api/library"
-import { QueryPagination } from "@/components/dashboard/QueryPagination"
 
 const Page = () => {
   // 表格配置
@@ -48,22 +47,31 @@ const Page = () => {
   // 数据请求
   const [libraries, setLibraries] = useState<Library[]>([])
 
-  const { data } = useQuery<ResData>({
-    queryKey: ['libraries'],
-    queryFn: getLibrary, // 直接调用 getLibrary
-    staleTime: Infinity, // 数据永不过期
-  })
+
+  const [sentence, setSentence] = useState<string>(""); // 新增状态管理句子
+  const [pageNo, setPageNo] = useState<number>(0); // 当前页，初始值为 0
+  const [pageSize, setPageSize] = useState<number>(10); // 每页大小，初始值为 10
 
   useEffect(() => {
-    if (data) {
-      setLibraries(data.data?.libraries || []); // 更新为 data.data.libraries
-    }
-  }, [data])
+    const fetchData = async () => {
 
-  // 获取分页信息
-  const totalCount = data?.data?.totalCount || 0; // 获取总数
-  const pageNo = (data?.data?.pageNo ?? 0) + 1 || 1; // 获取当前页，注意加1以适应前端显示
-  const pageSize = data?.data?.pageSize || 10; // 获取每页大小
+      const queryParams = {
+        pageNo,
+        pageSize,
+        sentence,
+      };
+
+      try {
+        const data = await getLibrary(queryParams);
+        setLibraries(data.data?.libraries || []); // 更新为 data.data.libraries
+      } catch (error) {
+        console.error('获取数据错误:', error);
+      }
+    };
+
+    fetchData();
+  }, [pageNo, pageSize, sentence]); // 依赖于页码、每页大小和句子变化
+
 
   const table = useReactTable({
     data: libraries,
@@ -85,10 +93,11 @@ const Page = () => {
         <div className="flex space-x-2">
           <Input
             placeholder="Filter sentence..."
-            value={(table.getColumn("sentence")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("sentence")?.setFilterValue(event.target.value)
-            }
+            value={sentence} // 绑定输入框的值
+            onChange={(event) => {
+              setSentence(event.target.value); // 更新句子状态
+              table.getColumn("sentence")?.setFilterValue(event.target.value); // 更新表格过滤
+            }}
             className="max-w-sm"
           />
           <CreateLibraryDialog />
@@ -171,16 +180,11 @@ const Page = () => {
         </Table>
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+        <div className="text-gray-500 text-sm text-nowrap">
+          {table.getFilteredSelectedRowModel().rows.length} /{" "}
+          {table.getFilteredRowModel().rows.length} 行被选择.
         </div>
-        <QueryPagination
-          total={totalCount} // 使用 API 返回的总数
-          pageNo={pageNo} // 使用 API 返回的 pageNo，注意加1以适应前端显示
-          pageSize={pageSize} // 使用 API 返回的 pageSize
-          className="justify-end mt-4"
-        />
+
       </div>
     </div>
   )

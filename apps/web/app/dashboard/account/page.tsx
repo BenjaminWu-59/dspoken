@@ -63,7 +63,7 @@ export default function Page() {
       <Card className="w-[35%] h-[230px] p-8 flex flex-col items-center">
         <div className="w-36 h-36 relative flex justify-center items-center rounded-full group overflow-hidden">
           <img
-            src={user?.avatar || "/avatar.png"}
+            src={user?.avatar || "/avatar.svg"}
             alt="avatar"
             className="w-full h-full rounded-full object-cover"
           />

@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsString, IsNotEmpty, IsOptional, IsNumber, isNotEmpty, IsInt, Min, IsIn } from 'class-validator';
 
 export class getLibraryDto {
@@ -23,14 +24,16 @@ export class getLibraryDto {
   @IsOptional()
   classId: string;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10)) // 转换为整数
   pageNo: number = 0; // 默认为第0页
 
-  @IsInt()
+  @IsNumber()
   @Min(1)
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10)) // 转换为整数
   pageSize: number = 10; // 默认为每页10条
 }
 
