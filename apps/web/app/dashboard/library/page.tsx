@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 import {
@@ -48,19 +47,14 @@ const Page = () => {
   const [libraries, setLibraries] = useState<Library[]>([])
 
 
-  const [sentence, setSentence] = useState<string>(""); // 新增状态管理句子
-  const [pageNo, setPageNo] = useState<number>(0); // 当前页，初始值为 0
-  const [pageSize, setPageSize] = useState<number>(10); // 每页大小，初始值为 10
+  const [queryParams, setQueryParams] = useState<{ sentence: string; pageNo: number; pageSize: number }>({
+    sentence: "", 
+    pageNo: 0,    
+    pageSize: 10, 
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-
-      const queryParams = {
-        pageNo,
-        pageSize,
-        sentence,
-      };
-
       try {
         const data = await getLibrary(queryParams);
         setLibraries(data.data?.libraries || []); // 更新为 data.data.libraries
@@ -70,7 +64,7 @@ const Page = () => {
     };
 
     fetchData();
-  }, [pageNo, pageSize, sentence]); // 依赖于页码、每页大小和句子变化
+  }, [queryParams]); // 依赖于页码、每页大小和句子变化
 
 
   const table = useReactTable({
@@ -93,9 +87,9 @@ const Page = () => {
         <div className="flex space-x-2">
           <Input
             placeholder="Filter sentence..."
-            value={sentence} // 绑定输入框的值
+            value={queryParams.sentence} // 绑定输入框的值
             onChange={(event) => {
-              setSentence(event.target.value); // 更新句子状态
+              setQueryParams({ ...queryParams, sentence: event.target.value }); // 更新句子状态
               table.getColumn("sentence")?.setFilterValue(event.target.value); // 更新表格过滤
             }}
             className="max-w-sm"

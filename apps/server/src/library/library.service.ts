@@ -52,7 +52,10 @@ export class LibraryService {
       };
     } catch (error) {
       console.error("get library error:", error);
-      throw new Error("get library error");
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ForbiddenException(error.meta)
+      }
+      throw error
     }
   }
 
