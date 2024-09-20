@@ -61,22 +61,27 @@ const Page = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getLibrary(queryParams);
-        setLibraries(data.data?.libraries || []);
-        setTotalCount(data.data?.totalCount || 0); // 设置总计数
-      } catch (error) {
-        console.error('获取数据错误:', error);
-      }
-    };
-
-    fetchData();
+    getList();
   }, [queryParams]);
 
   // 计算总页数
   const totalPages = Math.ceil(totalCount / queryParams.pageSize);
 
+  const getList = useCallback(async () => {
+    try {
+      const data = await getLibrary(queryParams);
+      setLibraries(data.data?.libraries || []);
+      setTotalCount(data.data?.totalCount || 0);
+    } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: error["message"],
+        duration: 1500
+      })
+    }
+  }, [queryParams]);
+
+  // 处理编辑
   const handleDelete = useCallback(async (library: Library) => {
     if (library.id) {
       try {
@@ -105,6 +110,7 @@ const Page = () => {
     }
   }, [queryParams]);
 
+  // 处理编辑
   const handleEdit = useCallback((library: Library) => {
     console.log("编辑library：", library)
   }, []);
@@ -218,7 +224,8 @@ const Page = () => {
       ),
     },
   ]
-
+  
+  // 表格整体配置
   const table = useReactTable({
     data: libraries,
     columns,
@@ -234,7 +241,7 @@ const Page = () => {
     state: tableState,
   })
 
-
+  
   return (
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
@@ -248,7 +255,7 @@ const Page = () => {
             }}
             className="max-w-sm"
           />
-          <CreateLibraryDialog />
+          <CreateLibraryDialog onLibraryCreated={getList}/>
         </div>
       </div>
       <div className="rounded-md border">

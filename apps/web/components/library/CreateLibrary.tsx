@@ -13,8 +13,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { addLibrary, Library } from "@/api/library"
+import { toast } from "../ui/use-toast"
 
-export default function CreateLibraryDialog() {
+interface CreateLibraryDialogProps {
+  onLibraryCreated: () => void;
+}
+
+export default function CreateLibraryDialog({ onLibraryCreated }: CreateLibraryDialogProps) {
   const [open, setOpen] = useState(false)
   const [sentence, setSentence] = useState("")
   const [hint, setHint] = useState("")
@@ -28,6 +33,7 @@ export default function CreateLibraryDialog() {
       setOpen(false)
       setSentence("")
       setHint("")
+      onLibraryCreated()
     },
   })
 
@@ -39,6 +45,12 @@ export default function CreateLibraryDialog() {
       classId: "cm0qfjrbp000112wuvhgdgyi3"
     }
     createLibraryMutation.mutate(newLibrary)
+
+    toast({
+      variant:"success",
+      title: "创建成功！",
+      duration: 1500
+    })
   }
 
   return (
