@@ -1,16 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
-  SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -39,13 +37,15 @@ import { Input } from "@/components/ui/input"
 import CreateLibraryDialog from "@/components/library/CreateLibrary"
 import { Library, getLibrary, deleteLibrary } from "@/api/library"
 import QueryPagination from "@/components/dashboard/QueryPagination"
+import { toast } from "@/components/ui/use-toast"
 
 const Page = () => {
   // 表格配置
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [tableState, setTableState] = useState({
+    columnFilters: [] as ColumnFiltersState,
+    columnVisibility: {} as VisibilityState,
+    rowSelection: {}
+  });
 
   // 知识库数据
   const [libraries, setLibraries] = useState<Library[]>([])
@@ -77,21 +77,163 @@ const Page = () => {
   // 计算总页数
   const totalPages = Math.ceil(totalCount / queryParams.pageSize);
 
+  const handleDelete = useCallback(async (library: Library) => {
+    if (library.id) {
+      try {
+        await deleteLibrary(library.id);
+
+        toast({
+          variant:"success",
+          title: "删除成功！",
+          duration: 1500
+        })
+
+        // 删除成功后重新获取数据
+        const data = await getLibrary(queryParams);
+        setLibraries(data.data?.libraries || []);
+        setTotalCount(data.data?.totalCount || 0);
+      } catch (error: any) {
+        console.log("删除错误：", error)
+        toast({
+          variant: "destructive",
+          title: error.message,
+          duration: 1500
+        })
+      }
+    } else {
+      console.error("Library ID 不存在");
+    }
+  }, [queryParams]);
+
+  const handleEdit = useCallback((library: Library) => {
+    console.log("编辑library：", library)
+  }, []);
+
+  // 表头及内容配置加载
+  const columns: ColumnDef<Library>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "number",
+      header: "序号",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("number")}</div>
+      ),
+    },
+    {
+      accessorKey: "sentence",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full"
+          >
+            知识
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase text-center">{row.getValue("sentence")}</div>,
+    },
+    {
+      accessorKey: "hint",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full"
+          >
+            提示
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase text-center">{row.getValue("hint")}</div>,
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full"
+          >
+            状态
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase text-center">{row.getValue("status")}</div>,
+    },
+    {
+      id: "actions",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full"
+          >
+            操作
+          </Button>
+        )
+      },
+      cell: ({ row }) => (
+        <div className="flex justify-center space-x-2">
+          <Button onClick={() => handleEdit(row.original)}>编辑</Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">删除</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>您确定要删除这条知识吗？</AlertDialogTitle>
+                <AlertDialogDescription>
+                  删除后的信息将无法恢复，请你仔细考虑再进行删除！
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>取消</AlertDialogCancel>
+                <AlertDialogAction onClick={() => handleDelete(row.original)}>确定</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      ),
+    },
+  ]
 
   const table = useReactTable({
     data: libraries,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: (newFilters) =>
+      setTableState(prev => ({ ...prev, columnFilters: newFilters as ColumnFiltersState })),
+    onColumnVisibilityChange: (newVisibility) =>
+      setTableState(prev => ({ ...prev, columnVisibility: newVisibility as VisibilityState})),
+    onRowSelectionChange: (newSelection) =>
+      setTableState(prev => ({ ...prev, rowSelection: newSelection })),
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    state: tableState,
   })
-  
+
 
   return (
     <div className="w-full">
@@ -175,129 +317,3 @@ const Page = () => {
 }
 
 export default Page
-
-const columns: ColumnDef<Library>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "number",
-    header: "序号",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("number")}</div>
-    ),
-  },
-  {
-    accessorKey: "sentence",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="w-full"
-        >
-          知识
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("sentence")}</div>,
-  },
-  {
-    accessorKey: "hint",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="w-full"
-        >
-          提示
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("hint")}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="w-full"
-        >
-          状态
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("status")}</div>,
-  },
-  {
-    id: "actions",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="w-full"
-        >
-          操作
-        </Button>
-      )
-    },
-    cell: ({ row }) => (
-      <div className="flex justify-center space-x-2">
-        <Button onClick={() => handleEdit(row.original)}>编辑</Button>
-
-
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive">删除</Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>您确定要删除这条知识吗？</AlertDialogTitle>
-              <AlertDialogDescription>
-                删除后的信息将无法恢复，请你仔细考虑再进行删除！
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleDelete(row.original)}>确定</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
-    ),
-  },
-]
-
-// 添加处理函数
-const handleEdit = (library: Library) => {
-  console.log("编辑library：", library)
-}
-
-
-// 处理删除
-const handleDelete = async (library: Library) => {
-  if (library.id) {
-    await deleteLibrary(library.id);
-  } else {
-    console.error("Library ID 不存在");
-  }
-}
