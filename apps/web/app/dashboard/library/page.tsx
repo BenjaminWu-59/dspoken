@@ -44,7 +44,6 @@ const Page = () => {
   const [tableState, setTableState] = useState({
     columnFilters: [] as ColumnFiltersState,
     columnVisibility: {} as VisibilityState,
-    rowSelection: {}
   });
 
   // 知识库数据
@@ -117,28 +116,6 @@ const Page = () => {
 
   // 表头及内容配置加载
   const columns: ColumnDef<Library>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "number",
       header: "序号",
@@ -233,8 +210,6 @@ const Page = () => {
       setTableState(prev => ({ ...prev, columnFilters: newFilters as ColumnFiltersState })),
     onColumnVisibilityChange: (newVisibility) =>
       setTableState(prev => ({ ...prev, columnVisibility: newVisibility as VisibilityState})),
-    onRowSelectionChange: (newSelection) =>
-      setTableState(prev => ({ ...prev, rowSelection: newSelection })),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -309,10 +284,6 @@ const Page = () => {
         </Table>
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="text-gray-500 text-sm text-nowrap">
-          {table.getFilteredSelectedRowModel().rows.length} /{" "}
-          {table.getFilteredRowModel().rows.length} 行被选择.
-        </div>
         <QueryPagination
           pageNo={queryParams.pageNo}
           setPageNo={(newPageNo) => setQueryParams({ ...queryParams, pageNo: newPageNo })}
